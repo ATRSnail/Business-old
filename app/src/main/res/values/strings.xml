@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Business</string>
+
+    <!-- 页面名称 -->
+    <string name="main_navigation_home">首页</string>
+    <string name="main_navigation_im">会务</string>
+    <string name="main_navigation_interest">通讯录</string>
+    <string name="main_navigation_user">我的</string>
+
+    <string name="internet_error">网络异常,请检查网络设置</string>
+    <string name="load_error">加载失败</string>
+    <string name="retry_after">请稍后重试</string>
+    <string name="retry_refresh_news">点我一下 重新加载</string>
+
+    <string name="account_manager">账号管理</string>
+    <string name="assis_manager">助理管理</string>
+    <string name="account_safe">账号安全</string>
+    <string name="news_manager">新消息通知</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="about">关于</string>
+    <string name="quit_account">退出登录</string>
+
+    <string name="plz_search_hint">请输入搜索内容</string>
+</resources>
