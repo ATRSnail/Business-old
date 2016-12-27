@@ -1,5 +1,6 @@
 package com.bus.business.mvp.ui.activities;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
     private static int currIndex = 0;
@@ -79,6 +81,11 @@ public class MainActivity extends BaseActivity {
 
         currIndex = index;
         showFragment();
+    }
+
+    @OnClick(R.id.rl_search)
+    public void toSearch(View v){
+        startActivity(new Intent(MainActivity.this,SearchActivity.class));
     }
 
     private String setTabSelection(int index){

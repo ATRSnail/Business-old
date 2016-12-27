@@ -1,18 +1,24 @@
 package com.bus.business.mvp.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.bus.business.R;
+import com.bus.business.mvp.ui.activities.PlaceActivity;
 import com.bus.business.mvp.ui.adapter.ViewPageAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author xch
@@ -31,6 +37,9 @@ public class MainPagerFragment extends BaseFragment {
     ViewPageAdapter mViewPageAdapter;
     private List<String> mTitles = new ArrayList<String>();
     private List<Fragment> mFragments = new ArrayList<Fragment>();
+
+    @Inject
+    Activity mActivity;
 
     @Override
     public void initInjector() {
@@ -54,5 +63,10 @@ public class MainPagerFragment extends BaseFragment {
     @Override
     public int getLayoutId() {
         return R.layout.fragment_main_page;
+    }
+
+    @OnClick(R.id.img_plus)
+    public void choiceCity(View v){
+      startActivity(new Intent(mActivity, PlaceActivity.class));
     }
 }

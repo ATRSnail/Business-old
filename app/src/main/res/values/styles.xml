@@ -57,7 +57,7 @@
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.NoActionBar" />
 
     <!-- 自适应TextView -->
     <declare-styleable name="AutofitTextView">

@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.ui.activities.NewDetailActivity"/>
+        <activity android:name=".mvp.ui.activities.NewDetailActivity" />
+        <activity android:name=".mvp.ui.activities.SearchActivity" />
+        <activity android:name=".mvp.ui.activities.PlaceActivity"></activity>
     </application>
 
 </manifest>

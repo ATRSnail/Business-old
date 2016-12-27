@@ -52,7 +52,7 @@ public class NewDetailActivity extends BaseActivity implements NewsView<NewsBean
         mPresenter = mNewsPresenter;
         mPresenter.attachView(this);
         mPresenter.onCreate();
-        setCustomTitle("习近平绿色发展理念引领中国环境治理新实践");
+        setCustomTitle("习近平");
         showOrGoneSearchRl(View.GONE);
     }
 
