@@ -1,11 +1,18 @@
 package com.bus.business.repository.network;
 
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.bus.business.App;
 import com.bus.business.common.ApiConstants;
+import com.bus.business.common.UsrMgr;
+import com.bus.business.mvp.entity.response.RspBannerBean;
+import com.bus.business.mvp.entity.response.RspBusDetailBean;
+import com.bus.business.mvp.entity.response.RspBusinessBean;
 import com.bus.business.mvp.entity.response.RspMeetingBean;
+import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
+import com.bus.business.mvp.entity.response.RspUserBean;
 import com.bus.business.utils.NetUtil;
 import com.socks.library.KLog;
 
@@ -22,6 +29,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -125,19 +133,64 @@ public class RetrofitManager {
         }
     };
 
-    public Observable<RspNewsBean> getNewsListObservable(int pageNum, int numPerPage) {
-        Map<String,String> map = new HashMap<>();
-        map.put("pageNum", pageNum+"");
-        map.put("numPerPage", numPerPage+"");
+    public Observable<RspNewsBean> getNewsListObservable(int pageNum, int numPerPage, String title) {
+        Map<String, String> map = new HashMap<>();
+        map.put("pageNum", pageNum + "");
+        map.put("numPerPage", numPerPage + "");
+        if (!TextUtils.isEmpty(title))
+            map.put("title", title);
         KLog.a(map.toString());
         return mNewsService.getNewsList(map);
     }
 
-    public Observable<RspMeetingBean> getMeetingsListObservable(int pageNum, int numPerPage) {
-        Map<String,String> map = new HashMap<>();
-        map.put("pageNum", pageNum+"");
-        map.put("numPerPage", numPerPage+"");
+    public Observable<RspMeetingBean> getMeetingsListObservable(int pageNum, int numPerPage, String meetingName) {
+        Map<String, String> map = new HashMap<>();
+        map.put("pageNum", pageNum + "");
+        map.put("numPerPage", numPerPage + "");
+        map.put("userId", UsrMgr.getUseId());
+        if (!TextUtils.isEmpty(meetingName))
+            map.put("meetingName", "");
         KLog.a(map.toString());
         return mNewsService.getMeetingsList(map);
+    }
+
+    public Observable<RspUserBean> getLoginInObservable(String phoneNum, String password) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phoneNum);
+        map.put("passWord", password);
+        KLog.a(map.toString());
+        return mNewsService.loginIn(map);
+    }
+
+    public Observable<RspBannerBean> getBannersObservable() {
+        return mNewsService.getBanners();
+    }
+
+    public Observable<RspNewDetailBean> getNewDetailObservable(String newsId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("newsId", newsId);
+        KLog.a(map.toString());
+        return mNewsService.getNewDetail(map);
+    }
+
+    public Observable<RspBusDetailBean> getBusDetailObservable(String newsId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("businessId", newsId);
+        KLog.a(map.toString());
+        return mNewsService.getBusDetail(map);
+    }
+
+    public Observable<ResponseBody> getNewsBodyHtmlPhoto(String photoPath) {
+        return mNewsService.getNewsBodyHtmlPhoto(photoPath);
+    }
+
+    public Observable<RspBusinessBean> getBusinessListObservable(int pageNum, int numPerPage, String title) {
+        Map<String, String> map = new HashMap<>();
+        map.put("pageNum", pageNum + "");
+        map.put("numPerPage", numPerPage + "");
+        if (!TextUtils.isEmpty(title))
+            map.put("title", title);
+        KLog.a(map.toString());
+        return mNewsService.getBusinessList(map);
     }
 }

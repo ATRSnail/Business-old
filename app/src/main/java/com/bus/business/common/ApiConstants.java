@@ -7,9 +7,23 @@ package com.bus.business.common;
  */
 public class ApiConstants {
 
-    public static final String NETEAST_HOST = "http://111.206.133.134:8080/wsp-web-restservice/";
+    public static final String NETEAST_HOST = "http://172.16.10.15:9300/";
 
     public static String getHost() {
         return NETEAST_HOST;
     }
+
+    public static final String NEWS_URL = "/gsl-api/gsl/news/newsList";
+
+    public static final String MEETINGS_URL = "/gsl-api/gsl/meeting/meetingList";
+
+    public static final String LOGIN_IN_URL = "/gsl-api/gsl/sysUser/login";
+
+    public static final String BANNER_URL = "/gsl-api/gsl/news/newsBannerList";
+
+    public static final String NEW_DETAIL_URL = "/gsl-api/gsl/news/getNews";
+
+    public static final String BUS_DETAIL_URL = "/gsl-api/gsl/business/getBusiness";
+
+    public static final String BUSINESS_LIST_URL = "/gsl-api/gsl/business/businessList";
 }

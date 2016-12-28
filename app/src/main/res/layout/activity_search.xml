@@ -9,51 +9,52 @@
     <include layout="@layout/layout_main_header" />
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/layout_circle_corner"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:src="@mipmap/icon_search"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/search_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:text="@string/cancel_string"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/search_edit"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/layout_circle_corner"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:layout_toLeftOf="@+id/search_cancel"
+            android:layout_toRightOf="@id/search_icon"
+            android:background="@null"
+            android:hint="@string/search_hint"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_e1dfdf" />
 
-            <ImageView
-                android:id="@+id/search_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:padding="4dp"
-                android:src="@mipmap/icon_search"
-                android:visibility="visible" />
+    </RelativeLayout>
 
-            <Button
-                android:id="@+id/search_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:layout_centerVertical="true"
-                android:text="@string/cancel_string"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/search_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@id/search_icon"
-                android:layout_toLeftOf="@+id/search_cancel"
-                android:background="@null"
-                android:hint="@string/search_hint"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/color_e1dfdf" />
-
-        </RelativeLayout>
-
-    <include layout="@layout/fragment_news"/>
+    <include layout="@layout/fragment_news" />
 
 </LinearLayout>

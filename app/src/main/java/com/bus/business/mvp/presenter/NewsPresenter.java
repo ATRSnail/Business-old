@@ -7,7 +7,7 @@ package com.bus.business.mvp.presenter;
  */
 public interface NewsPresenter {
 
-    void setNewsTypeAndId(int pageNum, int numPerPage);
+    void setNewsTypeAndId(int pageNum, int numPerPage,String title);
 
     void refreshData();
 

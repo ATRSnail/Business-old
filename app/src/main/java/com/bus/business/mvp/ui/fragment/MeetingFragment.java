@@ -11,8 +11,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bus.business.R;
+import com.bus.business.common.Constants;
+import com.bus.business.common.LoadNewsType;
+import com.bus.business.common.UsrMgr;
 import com.bus.business.mvp.entity.LikeBean;
-import com.bus.business.mvp.entity.Meetingbean;
+import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.presenter.impl.MeetingPresenterImpl;
 import com.bus.business.mvp.ui.adapter.MeetingsAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
@@ -35,7 +38,7 @@ import butterknife.BindView;
  * @create_date 16/12/23
  */
 public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
-        , NewsView<Meetingbean>, BaseQuickAdapter.RequestLoadMoreListener {
+        , NewsView<List<MeetingBean>>, BaseQuickAdapter.RequestLoadMoreListener {
 
     @BindView(R.id.news_rv)
     RecyclerView mNewsRV;
@@ -51,11 +54,10 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
     @Inject
     MeetingPresenterImpl mNewsPresenter;
     private BaseQuickAdapter mNewsListAdapter;
-    private List<LikeBean> likeBeanList;
+    private List<MeetingBean> likeBeanList;
 
 
     private int pageNum = 1;
-    private int numPerPage = 20;
 
     @Override
     public void initInjector() {
@@ -81,7 +83,8 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     private void initPresenter() {
-        mNewsPresenter.setNewsTypeAndId(pageNum, numPerPage);
+        KLog.a("userInfo--->"+UsrMgr.getUseInfo().toString());
+        mNewsPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage,"");
         mPresenter = mNewsPresenter;
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -94,26 +97,19 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
         mNewsRV.setLayoutManager(new LinearLayoutManager(mActivity,
                 LinearLayoutManager.VERTICAL, false));
         mNewsRV.setItemAnimator(new DefaultItemAnimator());
-        mNewsRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-            }
-
-        });
         likeBeanList = new ArrayList<>();
         mNewsListAdapter = new MeetingsAdapter(R.layout.layout_meeting_item, likeBeanList);
         mNewsListAdapter.setOnLoadMoreListener(this);
+        mNewsListAdapter.openLoadMore(20,true);
         mNewsRV.setAdapter(mNewsListAdapter);
 
     }
 
     @Override
-    public void setNewsList(Meetingbean newsBean) {
+    public void setNewsList(List<MeetingBean> newsBean, @LoadNewsType.checker int loadType) {
 //        checkIsEmpty(newsBean.getLikeList());
         KLog.a(newsBean.toString());
-        mNewsListAdapter.addData(newsBean.getLikeList());
+        mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean,true);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

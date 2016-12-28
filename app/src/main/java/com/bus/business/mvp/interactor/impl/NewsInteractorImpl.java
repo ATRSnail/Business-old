@@ -26,9 +26,9 @@ public class NewsInteractorImpl implements NewsInteractor<RspNewsBean> {
     }
 
     @Override
-    public Subscription loadNews(final RequestCallBack<RspNewsBean> listener, int pageNum, int numPerPage) {
+    public Subscription loadNews(final RequestCallBack<RspNewsBean> listener, int pageNum, int numPerPage,String title) {
 
-        return RetrofitManager.getInstance(1).getNewsListObservable(pageNum, numPerPage)
+        return RetrofitManager.getInstance(1).getNewsListObservable(pageNum, numPerPage,title)
                 .compose(TransformUtils.<RspNewsBean>defaultSchedulers())
                 .subscribe(new Subscriber<RspNewsBean>() {
                     @Override

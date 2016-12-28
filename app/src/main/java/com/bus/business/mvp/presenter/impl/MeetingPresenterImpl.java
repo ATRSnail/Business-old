@@ -1,6 +1,7 @@
 package com.bus.business.mvp.presenter.impl;
 
-import com.bus.business.mvp.entity.Meetingbean;
+import com.bus.business.common.LoadNewsType;
+import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.interactor.NewsInteractor;
 import com.bus.business.mvp.interactor.impl.MeetingInteractorImpl;
@@ -9,6 +10,8 @@ import com.bus.business.mvp.presenter.base.BasePresenterImpl;
 import com.bus.business.mvp.view.NewsView;
 import com.socks.library.KLog;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 /**
@@ -16,12 +19,13 @@ import javax.inject.Inject;
  * @version 1.0
  * @create_date 16/12/24
  */
-public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<Meetingbean>,RspMeetingBean>
+public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<List<MeetingBean>>, RspMeetingBean>
         implements NewsPresenter {
 
     private NewsInteractor<RspMeetingBean> mNewsInteractor;
     private int pageNum;
     private int numPerPage;
+    private String title;
     private String typeId;
     private boolean mIsRefresh = true;
     private boolean misFirstLoad;
@@ -49,7 +53,8 @@ public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<Meetingbean
     public void onError(String errorMsg) {
         super.onError(errorMsg);
         if (mView != null) {
-
+            int loadType = mIsRefresh ? LoadNewsType.TYPE_REFRESH_ERROR : LoadNewsType.TYPE_LOAD_MORE_ERROR;
+            mView.setNewsList(null, loadType);
         }
     }
 
@@ -57,18 +62,21 @@ public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<Meetingbean
     public void success(RspMeetingBean data) {
         misFirstLoad = true;
         KLog.a("ddd----success");
-        if (data == null || data.getBody().getLikeList() == null) return;
-        pageNum ++;
+        if (data == null || data.getBody() == null) return;
+        pageNum++;
+        int loadType = mIsRefresh ? LoadNewsType.TYPE_REFRESH_SUCCESS : LoadNewsType.TYPE_LOAD_MORE_SUCCESS;
+
         if (mView != null) {
-            mView.setNewsList(data.getBody());
+            mView.setNewsList(data.getBody().getMeetingList(), loadType);
             mView.hideProgress();
         }
     }
 
     @Override
-    public void setNewsTypeAndId(int pageNum, int numPerPage) {
+    public void setNewsTypeAndId(int pageNum, int numPerPage,String title) {
         this.pageNum = pageNum;
         this.numPerPage = numPerPage;
+        this.title = title;
     }
 
     @Override
@@ -80,10 +88,11 @@ public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<Meetingbean
 
     @Override
     public void loadMore() {
+        mIsRefresh = false;
         loadNewsData();
     }
 
     private void loadNewsData() {
-        mSubscription = mNewsInteractor.loadNews(this, pageNum, numPerPage);
+        mSubscription = mNewsInteractor.loadNews(this, pageNum, numPerPage,title);
     }
 }

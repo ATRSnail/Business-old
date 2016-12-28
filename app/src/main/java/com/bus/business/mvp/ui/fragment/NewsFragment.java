@@ -20,22 +20,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bus.business.R;
+import com.bus.business.common.ApiConstants;
 import com.bus.business.common.Constants;
+import com.bus.business.common.LoadNewsType;
+import com.bus.business.common.NewsType;
 import com.bus.business.mvp.entity.BannerBean;
-import com.bus.business.mvp.entity.LikeBean;
-import com.bus.business.mvp.entity.NewsBean;
+import com.bus.business.mvp.entity.response.RspBannerBean;
+import com.bus.business.mvp.entity.response.base.BaseNewBean;
+import com.bus.business.mvp.presenter.impl.BusinessPresenterImpl;
 import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
 import com.bus.business.mvp.ui.activities.NewDetailActivity;
 import com.bus.business.mvp.ui.adapter.NewsAdapter;
-import com.bus.business.mvp.ui.fragment.base.BaseFragment;
+import com.bus.business.mvp.ui.fragment.base.BaseLazyFragment;
+import com.bus.business.mvp.view.BusinessView;
 import com.bus.business.mvp.view.NewsView;
+import com.bus.business.repository.network.RetrofitManager;
 import com.bus.business.utils.NetUtil;
+import com.bus.business.utils.TransformUtils;
 import com.bus.business.widget.AutoSliderView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +49,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.Subscriber;
 
 import static android.view.View.VISIBLE;
 
@@ -51,10 +58,14 @@ import static android.view.View.VISIBLE;
  * @version 1.0
  * @create_date 16/12/23
  */
-public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
-        , NewsView<NewsBean>, BaseQuickAdapter.RequestLoadMoreListener
+public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout.OnRefreshListener
+        , NewsView<List<BaseNewBean>>
+,BusinessView
+        , BaseQuickAdapter.RequestLoadMoreListener
         , BaseQuickAdapter.OnRecyclerViewItemClickListener
         , BaseSliderView.OnSliderClickListener {
+
+    public static final String NEW_TYPE = "new_type";
     @BindView(R.id.news_rv)
     RecyclerView mNewsRV;
     @BindView(R.id.progress_bar)
@@ -74,11 +85,21 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     Activity mActivity;
     @Inject
     NewsPresenterImpl mNewsPresenter;
+    @Inject
+    BusinessPresenterImpl mBusinessPresenter;
     private BaseQuickAdapter mNewsListAdapter;
-    private List<LikeBean> likeBeanList;
+    private List<BaseNewBean> likeBeanList;
 
     private int pageNum = 1;
-    private int numPerPage = 20;
+    private boolean isXunFrg;//true是讯息页,false是协会页
+
+    public static NewsFragment getInstance(@NewsType.checker int checker) {
+        NewsFragment newsFragment = new NewsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(NEW_TYPE, checker);
+        newsFragment.setArguments(bundle);
+        return newsFragment;
+    }
 
     @Override
     public void initInjector() {
@@ -87,14 +108,31 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void initViews(View view) {
+
+    }
+
+    @Override
+    public void onFirstUserVisible() {
+        initViews();
+    }
+
+    private void initViews() {
+        initIntentData();
         initHeadView();
         initSlider();
         initSwipeRefreshLayout();
         initRecyclerView();
         initPresenter();
+        loadBannerData();
     }
 
+    private void initIntentData() {
+        isXunFrg = getArguments() == null || getArguments().getInt(NEW_TYPE) == 1;
+    }
+
+
     private void initHeadView() {
+        if (!isXunFrg) return;
         weatherView = View.inflate(getContext(), R.layout.layout_weather, null);
         mTitleHeader = View.inflate(mActivity, R.layout.layout_head_text, null);
         mSlideHeader = View.inflate(mActivity, R.layout.layout_autoloop_viewpage, null);
@@ -113,10 +151,18 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     private void initPresenter() {
-        mNewsPresenter.setNewsTypeAndId(pageNum, numPerPage);
-        mPresenter = mNewsPresenter;
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
+        if (isXunFrg){
+            mNewsPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage,"");
+            mNewsPresenter.attachView(this);
+            mPresenter = mNewsPresenter;
+            mPresenter.onCreate();
+        }else {
+            mBusinessPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage,"");
+            mBusinessPresenter.attachView(this);
+            mPresenter = mBusinessPresenter;
+            mPresenter.onCreate();
+        }
+
     }
 
     private void initRecyclerView() {
@@ -124,22 +170,17 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         mNewsRV.setLayoutManager(new LinearLayoutManager(mActivity,
                 LinearLayoutManager.VERTICAL, false));
         mNewsRV.setItemAnimator(new DefaultItemAnimator());
-        mNewsRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-            }
-
-        });
 
         likeBeanList = new ArrayList<>();
         mNewsListAdapter = new NewsAdapter(R.layout.layout_new_item, likeBeanList);
         mNewsListAdapter.setOnLoadMoreListener(this);
-        mNewsListAdapter.addHeaderView(weatherView);
-        mNewsListAdapter.addHeaderView(mSlideHeader);
-        mNewsListAdapter.addHeaderView(mTitleHeader);
+        if (isXunFrg) {
+            mNewsListAdapter.addHeaderView(weatherView);
+            mNewsListAdapter.addHeaderView(mSlideHeader);
+            mNewsListAdapter.addHeaderView(mTitleHeader);
+        }
         mNewsListAdapter.setOnRecyclerViewItemClickListener(this);
+        mNewsListAdapter.openLoadMore(Constants.numPerPage, true);
         mNewsRV.setAdapter(mNewsListAdapter);
 
     }
@@ -148,7 +189,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
      * 初始化导航图
      */
     private void initSlider() {
-        if (sliderLayout == null || pagerIndicator == null) return;
+        if (!isXunFrg || sliderLayout == null || pagerIndicator == null) return;
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Default);
         sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         sliderLayout.setDuration(4000);
@@ -161,38 +202,73 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
      * @param mList
      */
     private void initSlider(List<BannerBean> mList) {
-        if (mList == null){
-            mList = new ArrayList<>();
-            mList.add(new BannerBean("AA"));
-            mList.add(new BannerBean("AA"));
-            mList.add(new BannerBean("AA"));
-        }
+        if (!isXunFrg) return;
         mSlideHeader.setVisibility(VISIBLE);
         for (BannerBean pageIconBean : mList) {
             AutoSliderView textSliderView = new AutoSliderView(this.getActivity(), pageIconBean);
             // initialize a SliderLayout
             textSliderView
-                    .description(pageIconBean.getTypeName())
-                    .image("http://111.206.135.50:8080"+pageIconBean.getImg())
+                    .description(pageIconBean.getTitle())
+                    .image(ApiConstants.NETEAST_HOST + pageIconBean.getFmImg())
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);
 
             //add your extra information
             Bundle bundle = new Bundle();
-            bundle.putString("typeId", pageIconBean.getVfType());
-            bundle.putString("id", pageIconBean.getOutid());
+            bundle.putString("typeId", pageIconBean.getTypes());
+            bundle.putString("id", pageIconBean.getTitle());
             textSliderView.bundle(bundle);
             sliderLayout.addSlider(textSliderView);
         }
     }
 
+    private void loadBannerData() {
+        if (!isXunFrg) return;
+        RetrofitManager.getInstance(1).getBannersObservable()
+                .compose(TransformUtils.<RspBannerBean>defaultSchedulers())
+                .subscribe(new Subscriber<RspBannerBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(RspBannerBean rspBannerBean) {
+                        initSlider(rspBannerBean.getBody().getNewsBannerList());
+                    }
+                });
+    }
+
+
     @Override
-    public void setNewsList(NewsBean newsBean) {
+    public void setNewsList(List<BaseNewBean> newsBean, @LoadNewsType.checker int loadType) {
 //        checkIsEmpty(newsBean.getLikeList());
-        KLog.a(newsBean.toString());
-        initSlider(null);
-        mNewsListAdapter.addData(newsBean.getLikeList());
-        mSwipeRefreshLayout.setRefreshing(false);
+        switch (loadType) {
+            case LoadNewsType.TYPE_REFRESH_SUCCESS:
+                mSwipeRefreshLayout.setRefreshing(false);
+                mNewsListAdapter.setNewData(newsBean);
+                checkIsEmpty(newsBean);
+                break;
+            case LoadNewsType.TYPE_REFRESH_ERROR:
+                mSwipeRefreshLayout.setRefreshing(false);
+                checkIsEmpty(newsBean);
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
+                if (newsBean == null || newsBean.size() == 0) {
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_ERROR:
+
+                break;
+        }
     }
 
     @Override
@@ -216,26 +292,40 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        mNewsPresenter.refreshData();
+        if (isXunFrg){
+            mNewsPresenter.refreshData();
+        }else {
+            mBusinessPresenter.refreshData();
+        }
+
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mNewsPresenter.onDestory();
+        if (isXunFrg){
+            mNewsPresenter.onDestory();
+        }else {
+            mBusinessPresenter.onDestory();
+        }
+
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mNewsPresenter.loadMore();
+        if (isXunFrg){
+            mNewsPresenter.loadMore();
+        }else {
+            mBusinessPresenter.loadMore();
+        }
+
     }
 
-    private void checkIsEmpty(List<LikeBean> newsSummary) {
+    private void checkIsEmpty(List<BaseNewBean> newsSummary) {
         if (newsSummary == null && mNewsListAdapter.getData() == null) {
             mNewsRV.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
-
         } else {
             mNewsRV.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.GONE);
@@ -255,10 +345,10 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @NonNull
     private Intent setIntent(int position) {
-        List<LikeBean> newsSummaryList = mNewsListAdapter.getData();
+        List<BaseNewBean> newsSummaryList = mNewsListAdapter.getData();
         Intent intent = new Intent(mActivity, NewDetailActivity.class);
-        intent.putExtra(Constants.NEWS_POST_ID, newsSummaryList.get(position).getId());
-        intent.putExtra(Constants.NEWS_IMG_RES, newsSummaryList.get(position).getCopyrightImg());
+        intent.putExtra(Constants.NEWS_POST_ID, newsSummaryList.get(position).getId()+"");
+        intent.putExtra(Constants.NEWS_TYPE,isXunFrg?"1":"2");
         return intent;
     }
 
@@ -269,13 +359,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     .makeSceneTransitionAnimation(mActivity, newsSummaryPhotoIv, Constants.TRANSITION_ANIMATION_NEWS_PHOTOS);
             startActivity(intent, options.toBundle());
         } else {
-/*            ActivityOptionsCompat.makeCustomAnimation(this,
-                    R.anim.slide_bottom_in, R.anim.slide_bottom_out);
-            这个我感觉没什么用处，类似于
-            overridePendingTransition(R.anim.slide_bottom_in, android.R.anim.fade_out);*/
-
-/*            ActivityOptionsCompat.makeThumbnailScaleUpAnimation(source, thumbnail, startX, startY)
-            这个方法可以用于4.x上，是将一个小块的Bitmpat进行拉伸的动画。*/
 
             //让新的Activity从一个小的范围扩大到全屏
             ActivityOptionsCompat options = ActivityOptionsCompat
@@ -292,5 +375,30 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         }
         String typeId = bundle.getString("typeId");
         String id = bundle.getString("id");
+    }
+
+    @Override
+    public void setBusinessList(List<BaseNewBean> newsBean, @LoadNewsType.checker int loadType) {
+        switch (loadType) {
+            case LoadNewsType.TYPE_REFRESH_SUCCESS:
+                mSwipeRefreshLayout.setRefreshing(false);
+                mNewsListAdapter.setNewData(newsBean);
+                checkIsEmpty(newsBean);
+                break;
+            case LoadNewsType.TYPE_REFRESH_ERROR:
+                mSwipeRefreshLayout.setRefreshing(false);
+                checkIsEmpty(newsBean);
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
+                if (newsBean == null || newsBean.size() == 0) {
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_ERROR:
+
+                break;
+        }
     }
 }

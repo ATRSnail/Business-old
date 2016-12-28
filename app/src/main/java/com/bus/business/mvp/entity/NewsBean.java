@@ -1,5 +1,7 @@
 package com.bus.business.mvp.entity;
 
+import com.bus.business.mvp.entity.response.base.BaseNewBean;
+
 import java.util.List;
 
 /**
@@ -8,30 +10,20 @@ import java.util.List;
  * @create_date 16/12/22
  */
 public class NewsBean {
-    private String seed;
-    private List<LikeBean> likeList;
+    private List<BaseNewBean> newsList;
 
-    public String getSeed() {
-        return seed;
+    public List<BaseNewBean> getNewsList() {
+        return newsList;
     }
 
-    public void setSeed(String seed) {
-        this.seed = seed;
-    }
-
-    public List<LikeBean> getLikeList() {
-        return likeList;
-    }
-
-    public void setLikeList(List<LikeBean> likeList) {
-        this.likeList = likeList;
+    public void setNewsList(List<BaseNewBean> newsList) {
+        this.newsList = newsList;
     }
 
     @Override
     public String toString() {
-        return "LikeListModel{" +
-                "seed='" + seed + '\'' +
-                ", likeList=" + likeList +
+        return "NewsBean{" +
+                "newsList=" + newsList +
                 '}';
     }
 }

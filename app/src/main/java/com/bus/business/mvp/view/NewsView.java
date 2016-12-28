@@ -1,5 +1,6 @@
 package com.bus.business.mvp.view;
 
+import com.bus.business.common.LoadNewsType;
 import com.bus.business.mvp.view.base.BaseView;
 
 /**
@@ -9,5 +10,5 @@ import com.bus.business.mvp.view.base.BaseView;
  */
 public interface NewsView<T> extends BaseView {
 
-    void setNewsList(T newsBean);
+    void setNewsList(T newsBean, @LoadNewsType.checker int loadType);
 }

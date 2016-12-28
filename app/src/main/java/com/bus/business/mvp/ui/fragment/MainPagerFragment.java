@@ -8,9 +8,11 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.bus.business.R;
+import com.bus.business.common.NewsType;
 import com.bus.business.mvp.ui.activities.PlaceActivity;
 import com.bus.business.mvp.ui.adapter.ViewPageAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import butterknife.OnClick;
  * @version 1.0
  * @create_date 16/12/22
  */
-public class MainPagerFragment extends BaseFragment {
+public class MainPagerFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
     private static final String[] TITLE = {"讯息","协会+"};
 
@@ -34,7 +36,7 @@ public class MainPagerFragment extends BaseFragment {
     @BindView(R.id.vp_view)
     ViewPager mViewPager;
 
-    ViewPageAdapter mViewPageAdapter;
+    private ViewPageAdapter mViewPageAdapter;
     private List<String> mTitles = new ArrayList<String>();
     private List<Fragment> mFragments = new ArrayList<Fragment>();
 
@@ -50,14 +52,16 @@ public class MainPagerFragment extends BaseFragment {
     public void initViews(View view) {
         mTitles.add(TITLE[0]);
         mTitles.add(TITLE[1]);
-        mFragments.add(new NewsFragment());
-        mFragments.add(new NewsFragment());
+        mFragments.add(NewsFragment.getInstance(NewsType.TYPE_REFRESH_XUNXI));
+        mFragments.add(NewsFragment.getInstance(NewsType.TYPE_REFRESH_XIEHUI));
         mViewPageAdapter = new ViewPageAdapter(getActivity().getSupportFragmentManager(), mTitles, mFragments);
+        mViewPager.addOnPageChangeListener(this);
         mViewPager.setAdapter(mViewPageAdapter);
         //为TabLayout设置ViewPager
         mTabLayout.setupWithViewPager(mViewPager);
         //使用ViewPager的适配器
         mTabLayout.setTabsFromPagerAdapter(mViewPageAdapter);
+
     }
 
     @Override
@@ -68,5 +72,20 @@ public class MainPagerFragment extends BaseFragment {
     @OnClick(R.id.img_plus)
     public void choiceCity(View v){
       startActivity(new Intent(mActivity, PlaceActivity.class));
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        KLog.a("position--->"+position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

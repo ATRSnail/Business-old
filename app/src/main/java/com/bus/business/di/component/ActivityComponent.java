@@ -8,6 +8,7 @@ import com.bus.business.di.scope.ContextLife;
 import com.bus.business.di.scope.PerActivity;
 import com.bus.business.mvp.ui.activities.NewDetailActivity;
 import com.bus.business.mvp.ui.activities.PlaceActivity;
+import com.bus.business.mvp.ui.activities.SearchActivity;
 
 import dagger.Component;
 
@@ -30,4 +31,5 @@ public interface ActivityComponent {
 
     void inject(NewDetailActivity newsDetailActivity);
     void inject(PlaceActivity newsDetailActivity);
+    void inject(SearchActivity newsDetailActivity);
 }

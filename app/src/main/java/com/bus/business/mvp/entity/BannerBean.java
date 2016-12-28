@@ -7,54 +7,26 @@ package com.bus.business.mvp.entity;
  */
 public class BannerBean {
 
+
     /**
-     * typeName : 电影
-     * id : 13
-     * utime : 1465904126000
-     * cb :
-     * hit : null
-     * img : /banner/0bce60b57d824908968d88d078783a85.jpg
-     * vfType : 1
-     * type : 0
-     * ctime : 1465724716000
-     * url :
-     * outid : 3
-     * isvip : 0
+     * id : 3
+     * utime : 1482477376000
+     * title : 测试新闻
+     * status : 1
+     * fmImg : /gsl/image/news/f95e9685430043e4a2d9ef17cb272382.jpg
+     * types : 1
+     * ctime : 1482473334000
+     * areaId : null
      */
 
-    private String typeName;
     private int id;
     private long utime;
-    private String cb;
-    private String hit;
-    private String img;
-    private String vfType;
-    private String type;
+    private String title;
+    private String status;
+    private String fmImg;
+    private String types;
     private long ctime;
-    private String url;
-    private String outid;
-    private String isvip;
-    private String vfName;
-
-    public BannerBean(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public String getVfName() {
-        return vfName;
-    }
-
-    public void setVfName(String vfName) {
-        this.vfName = vfName;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
+    private Object areaId;
 
     public int getId() {
         return id;
@@ -72,44 +44,36 @@ public class BannerBean {
         this.utime = utime;
     }
 
-    public String getCb() {
-        return cb;
+    public String getTitle() {
+        return title;
     }
 
-    public void setCb(String cb) {
-        this.cb = cb;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getHit() {
-        return hit;
+    public String getStatus() {
+        return status;
     }
 
-    public void setHit(String hit) {
-        this.hit = hit;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getImg() {
-        return img;
+    public String getFmImg() {
+        return fmImg;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setFmImg(String fmImg) {
+        this.fmImg = fmImg;
     }
 
-    public String getVfType() {
-        return vfType;
+    public String getTypes() {
+        return types;
     }
 
-    public void setVfType(String vfType) {
-        this.vfType = vfType;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setTypes(String types) {
+        this.types = types;
     }
 
     public long getCtime() {
@@ -120,27 +84,25 @@ public class BannerBean {
         this.ctime = ctime;
     }
 
-    public String getUrl() {
-        return url;
+    public Object getAreaId() {
+        return areaId;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAreaId(Object areaId) {
+        this.areaId = areaId;
     }
 
-    public String getOutid() {
-        return outid;
-    }
-
-    public void setOutid(String outid) {
-        this.outid = outid;
-    }
-
-    public String getIsvip() {
-        return isvip;
-    }
-
-    public void setIsvip(String isvip) {
-        this.isvip = isvip;
+    @Override
+    public String toString() {
+        return "BannerBean{" +
+                "id=" + id +
+                ", utime=" + utime +
+                ", title='" + title + '\'' +
+                ", status='" + status + '\'' +
+                ", fmImg='" + fmImg + '\'' +
+                ", types='" + types + '\'' +
+                ", ctime=" + ctime +
+                ", areaId=" + areaId +
+                '}';
     }
 }

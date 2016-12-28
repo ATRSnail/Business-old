@@ -11,6 +11,7 @@
     <string name="load_error">加载失败</string>
     <string name="retry_after">请稍后重试</string>
     <string name="retry_refresh_news">点我一下 重新加载</string>
+    <string name="no_more">没有更多了</string>
 
     <string name="account_manager">账号管理</string>
     <string name="assis_manager">助理管理</string>

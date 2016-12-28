@@ -10,5 +10,5 @@ import rx.Subscription;
  * @create_date 16/12/22
  */
 public interface NewsInteractor<T> {
-    Subscription loadNews(RequestCallBack<T> listener,int pageNum, int numPerPage);
+    Subscription loadNews(RequestCallBack<T> listener,int pageNum, int numPerPage,String title);
 }

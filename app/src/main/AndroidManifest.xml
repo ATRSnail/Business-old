@@ -15,16 +15,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppStartLoadTranslucent">
-        <activity android:name=".mvp.ui.activities.MainActivity">
+        <activity
+            android:name=".mvp.ui.activities.SplashActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".mvp.ui.activities.MainActivity" />
         <activity android:name=".mvp.ui.activities.NewDetailActivity" />
         <activity android:name=".mvp.ui.activities.SearchActivity" />
-        <activity android:name=".mvp.ui.activities.PlaceActivity"></activity>
+        <activity android:name=".mvp.ui.activities.PlaceActivity" />
+        <activity
+            android:name=".mvp.ui.activities.LoginActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

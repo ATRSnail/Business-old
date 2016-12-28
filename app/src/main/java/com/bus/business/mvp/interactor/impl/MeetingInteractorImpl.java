@@ -26,8 +26,8 @@ public class MeetingInteractorImpl implements NewsInteractor<RspMeetingBean> {
     }
 
     @Override
-    public Subscription loadNews(final RequestCallBack<RspMeetingBean> listener, int pageNum, int numPerPage) {
-        return RetrofitManager.getInstance(1).getMeetingsListObservable(pageNum, numPerPage)
+    public Subscription loadNews(final RequestCallBack<RspMeetingBean> listener, int pageNum, int numPerPage,String title) {
+        return RetrofitManager.getInstance(1).getMeetingsListObservable(pageNum, numPerPage,title)
                 .compose(TransformUtils.<RspMeetingBean>defaultSchedulers())
                 .subscribe(new Subscriber<RspMeetingBean>() {
                     @Override

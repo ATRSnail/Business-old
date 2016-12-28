@@ -1,40 +1,47 @@
 package com.bus.business.mvp.ui.activities;
 
 import android.app.Activity;
-import android.support.design.widget.Snackbar;
+import android.text.Html;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bus.business.R;
-import com.bus.business.mvp.entity.NewsBean;
-import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
+import com.bus.business.common.Constants;
+import com.bus.business.mvp.entity.BusDetailBean;
+import com.bus.business.mvp.entity.response.RspBusDetailBean;
+import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.ui.activities.base.BaseActivity;
-import com.bus.business.mvp.view.NewsView;
-import com.bus.business.utils.NetUtil;
+import com.bus.business.repository.network.RetrofitManager;
+import com.bus.business.utils.TransformUtils;
+import com.bus.business.widget.URLImageGetter;
+import com.socks.library.KLog;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.Subscriber;
 
-public class NewDetailActivity extends BaseActivity implements NewsView<NewsBean> {
+public class NewDetailActivity extends BaseActivity {
 
     private int pageNum = 1;
     private int numPerPage = 20;
+    private String newsId;
+    private String newsType;
 
     @Inject
     Activity mActivity;
-    @Inject
-    NewsPresenterImpl mNewsPresenter;
 
     @BindView(R.id.news_detail_title_tv)
     TextView mTitle;
     @BindView(R.id.news_detail_from_tv)
     TextView mFrom;
     @BindView(R.id.news_detail_body_tv)
-    TextView mDetail;
+    TextView mNewsDetailBodyTv;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+
+    private URLImageGetter mUrlImageGetter;
 
     @Override
     public int getLayoutId() {
@@ -48,39 +55,65 @@ public class NewDetailActivity extends BaseActivity implements NewsView<NewsBean
 
     @Override
     public void initViews() {
-        mNewsPresenter.setNewsTypeAndId(pageNum, numPerPage);
-        mPresenter = mNewsPresenter;
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
-        setCustomTitle("习近平");
+        newsId = getIntent().getStringExtra(Constants.NEWS_POST_ID);
+        newsType = getIntent().getStringExtra(Constants.NEWS_TYPE);
+
+        setCustomTitle(newsType.equals("1")?"新闻详情":"商讯详情");
         showOrGoneSearchRl(View.GONE);
+        loadNewDetail();
     }
 
-    @Override
-    public void setNewsList(NewsBean newsBean) {
-        mTitle.setText("习近平绿色发展理念引领中国环境治理新实践");
-        mFrom.setText("澎湃新闻 06-06 17:24");
-        mDetail.setText("最近，“民国无名女神”在微博上火了。讲真，这位无名女神是比现在那些整容脸、\n" +
-                "            网红脸让人看的赏心悦目。但是，比起那些年轰动的民国美女和才女们，她还是略有逊色。\n" +
-                "            要知道这些美女和才女们，不论是本尊还是是后世扮演她们的演员，真真是极美的。这些人里有你心中女神么？");
-    }
+    private void loadNewDetail(){
+        if (newsType.equals("1")){
+            RetrofitManager.getInstance(1).getNewDetailObservable(newsId)
+                    .compose(TransformUtils.<RspNewDetailBean>defaultSchedulers())
+                    .subscribe(new Subscriber<RspNewDetailBean>() {
+                        @Override
+                        public void onCompleted() {
 
-    @Override
-    public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
+                        }
 
-    @Override
-    public void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
-    }
+                        @Override
+                        public void onError(Throwable e) {
 
-    @Override
-    public void showMsg(String msg) {
-        mProgressBar.setVisibility(View.GONE);
-        // 网络不可用状态在此之前已经显示了提示信息
-        if (NetUtil.isNetworkAvailable()) {
-            Snackbar.make(mProgressBar, msg, Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onNext(RspNewDetailBean rspNewDetailBean) {
+                            mProgressBar.setVisibility(View.GONE);
+                            KLog.d(rspNewDetailBean.toString());
+                            fillData(rspNewDetailBean.getBody().getNews());
+                        }
+                    });
         }
+        else {
+            RetrofitManager.getInstance(1).getBusDetailObservable(newsId)
+                    .compose(TransformUtils.<RspBusDetailBean>defaultSchedulers())
+                    .subscribe(new Subscriber<RspBusDetailBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(RspBusDetailBean rspNewDetailBean) {
+                            mProgressBar.setVisibility(View.GONE);
+                            KLog.d(rspNewDetailBean.toString());
+                            fillData(rspNewDetailBean.getBody().getBusiness());
+                        }
+                    });
+        }
+    }
+
+    private void fillData(BusDetailBean bean){
+        mTitle.setText(bean.getTitle());
+        mFrom.setText("工商联");
+        mUrlImageGetter = new URLImageGetter(mNewsDetailBodyTv, bean.getContentS(), 1);
+        mNewsDetailBodyTv.setText(Html.fromHtml(bean.getContentS(),mUrlImageGetter,null));
     }
 }

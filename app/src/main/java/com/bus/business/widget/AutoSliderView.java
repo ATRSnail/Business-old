@@ -33,7 +33,7 @@ public class AutoSliderView extends BaseSliderView {
         ImageView img_vip = (ImageView) view.findViewById(R.id.item_vip_logo);
 //        img_vip.setVisibility(pageIconBean.getIsvip().equals("0") ? View.VISIBLE : View.GONE);
 //        title.setText(pageIconBean.getVfName());
-        item_type.setText(pageIconBean.getTypeName());
+        item_type.setText(pageIconBean.getTitle());
 //        item_desc.setText(pageIconBean.getHit());
         empty(R.mipmap.default_image);
         bindEventAndShow(view, imageView);
