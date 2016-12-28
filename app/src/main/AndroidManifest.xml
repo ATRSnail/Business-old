@@ -23,10 +23,10 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".mvp.ui.activities.MainActivity" />
         <activity android:name=".mvp.ui.activities.NewDetailActivity" />
         <activity android:name=".mvp.ui.activities.SearchActivity" />
@@ -34,6 +34,7 @@
         <activity
             android:name=".mvp.ui.activities.LoginActivity"
             android:launchMode="singleTop" />
+        <activity android:name=".mvp.ui.activities.RetPasswordActivity"></activity>
     </application>
 
 </manifest>

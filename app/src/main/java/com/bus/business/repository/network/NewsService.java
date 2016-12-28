@@ -8,6 +8,7 @@ import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
 import com.bus.business.mvp.entity.response.RspUserBean;
+import com.bus.business.mvp.entity.response.base.BaseRspObj;
 
 import java.util.Map;
 
@@ -49,6 +50,10 @@ public interface NewsService {
     @FormUrlEncoded
     @POST(ApiConstants.BUS_DETAIL_URL)
     Observable<RspBusDetailBean> getBusDetail(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.REVISE_PASSWORD_URL)
+    Observable<BaseRspObj> getRevisePassword(@FieldMap Map<String, String> map);
 
     @POST(ApiConstants.BANNER_URL)
     Observable<RspBannerBean> getBanners();

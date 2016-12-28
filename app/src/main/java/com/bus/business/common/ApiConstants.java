@@ -26,4 +26,6 @@ public class ApiConstants {
     public static final String BUS_DETAIL_URL = "/gsl-api/gsl/business/getBusiness";
 
     public static final String BUSINESS_LIST_URL = "/gsl-api/gsl/business/businessList";
+
+    public static final String REVISE_PASSWORD_URL = "/gsl-api/gsl/sysUser/upPass";
 }

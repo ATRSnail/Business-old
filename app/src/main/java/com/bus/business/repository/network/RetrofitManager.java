@@ -13,6 +13,7 @@ import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
 import com.bus.business.mvp.entity.response.RspUserBean;
+import com.bus.business.mvp.entity.response.base.BaseRspObj;
 import com.bus.business.utils.NetUtil;
 import com.socks.library.KLog;
 
@@ -192,5 +193,14 @@ public class RetrofitManager {
             map.put("title", title);
         KLog.a(map.toString());
         return mNewsService.getBusinessList(map);
+    }
+
+    public Observable<BaseRspObj> getRevisePasswordObservable(String phone, String passWord, String oldPassWord) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("passWord", passWord);
+        map.put("oldPassWord", oldPassWord);
+        KLog.a(map.toString());
+        return mNewsService.getRevisePassword(map);
     }
 }
