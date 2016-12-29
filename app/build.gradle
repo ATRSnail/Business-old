@@ -28,9 +28,9 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    //    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:design:23.4.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
@@ -54,4 +54,6 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     /*导航控件*/
     compile 'com.daimajia.slider:library:1.1.5'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile project(':libzxing')
 }

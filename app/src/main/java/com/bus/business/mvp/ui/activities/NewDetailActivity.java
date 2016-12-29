@@ -13,6 +13,7 @@ import com.bus.business.mvp.entity.response.RspBusDetailBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.ui.activities.base.BaseActivity;
 import com.bus.business.repository.network.RetrofitManager;
+import com.bus.business.utils.DateUtil;
 import com.bus.business.utils.TransformUtils;
 import com.bus.business.widget.URLImageGetter;
 import com.socks.library.KLog;
@@ -38,6 +39,8 @@ public class NewDetailActivity extends BaseActivity {
     TextView mFrom;
     @BindView(R.id.news_detail_body_tv)
     TextView mNewsDetailBodyTv;
+    @BindView(R.id.news_detail_fund_tv)
+    TextView mFundTv;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
@@ -60,6 +63,7 @@ public class NewDetailActivity extends BaseActivity {
 
         setCustomTitle(newsType.equals("1")?"新闻详情":"商讯详情");
         showOrGoneSearchRl(View.GONE);
+        mFundTv.setVisibility(newsType.equals("1")?View.GONE:View.VISIBLE);
         loadNewDetail();
     }
 
@@ -112,7 +116,8 @@ public class NewDetailActivity extends BaseActivity {
 
     private void fillData(BusDetailBean bean){
         mTitle.setText(bean.getTitle());
-        mFrom.setText("工商联");
+        mFrom.setText("工商联  "+ DateUtil.getCurGroupDay(bean.getUtime()));
+        mFundTv.setText("项目总投资"+bean.getInAmount()+"亿元");
         mUrlImageGetter = new URLImageGetter(mNewsDetailBodyTv, bean.getContentS(), 1);
         mNewsDetailBodyTv.setText(Html.fromHtml(bean.getContentS(),mUrlImageGetter,null));
     }

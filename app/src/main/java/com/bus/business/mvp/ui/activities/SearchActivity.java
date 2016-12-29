@@ -1,21 +1,40 @@
 package com.bus.business.mvp.ui.activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bus.business.R;
+import com.bus.business.common.Constants;
 import com.bus.business.common.LoadNewsType;
-import com.bus.business.mvp.entity.LikeBean;
+import com.bus.business.common.NewsType;
+import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.entity.response.base.BaseNewBean;
+import com.bus.business.mvp.presenter.impl.BusinessPresenterImpl;
+import com.bus.business.mvp.presenter.impl.MeetingPresenterImpl;
 import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
 import com.bus.business.mvp.ui.activities.base.BaseActivity;
+import com.bus.business.mvp.ui.adapter.MeetingsAdapter;
 import com.bus.business.mvp.ui.adapter.NewsAdapter;
+import com.bus.business.mvp.view.BusinessView;
+import com.bus.business.mvp.view.MeetingView;
 import com.bus.business.mvp.view.NewsView;
 import com.bus.business.utils.NetUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -29,8 +48,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener
-        , NewsView<List<LikeBean>> ,BaseQuickAdapter.RequestLoadMoreListener
-        , BaseQuickAdapter.OnRecyclerViewItemClickListener{
+        , NewsView<List<BaseNewBean>>
+        , MeetingView
+        , BusinessView
+        ,BaseQuickAdapter.RequestLoadMoreListener
+        , BaseQuickAdapter.OnRecyclerViewItemClickListener
+        ,TextView.OnEditorActionListener{
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -38,15 +61,23 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
     RecyclerView mNewsRV;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+    @BindView(R.id.search_edit)
+    EditText mSearchEdit;
 
+    private int searchIndex;
     private BaseQuickAdapter mNewsListAdapter;
     private List<BaseNewBean> likeBeanList;
+    private List<MeetingBean> meetList;
     private int pageNum = 1;
     private int numPerPage = 20;
     @Inject
     Activity mActivity;
     @Inject
     NewsPresenterImpl mNewsPresenter;
+    @Inject
+    BusinessPresenterImpl mBusinessPresenter;
+    @Inject
+    MeetingPresenterImpl mMeetsPresenter;
 
 
     @Override
@@ -63,10 +94,27 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
     public void initViews() {
         setCustomTitle("搜索");
         showOrGoneSearchRl(View.GONE);
-
+        searchIndex = getIntent().getIntExtra(NewsType.TYPE_SEARCH, 1);
         initSwipeRefreshLayout();
         initRecyclerView();
-     //   initPresenter();
+        initEdittext();
+    }
+
+    private void initEdittext() {
+        this.hideProgress();
+        switch (searchIndex) {
+            case NewsType.TYPE_REFRESH_XUNXI:
+                mSearchEdit.setHint("搜索讯息");
+                break;
+            case NewsType.TYPE_REFRESH_XIEHUI:
+                mSearchEdit.setHint("搜索协会");
+                break;
+            case NewsType.TYPE_REFRESH_HUIWU:
+                mSearchEdit.setHint("搜索会务");
+                break;
+        }
+        mSearchEdit.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        mSearchEdit.setOnEditorActionListener(this);
     }
 
     private void initSwipeRefreshLayout() {
@@ -74,10 +122,25 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
         mSwipeRefreshLayout.setColorSchemeColors(mActivity.getResources().getIntArray(R.array.gplus_colors));
     }
 
-    private void initPresenter() {
-        mNewsPresenter.setNewsTypeAndId(pageNum, numPerPage,"");
+    private void initNewsPresenter() {
+        mNewsPresenter.setNewsTypeAndId(pageNum, numPerPage, mSearchEdit.getText().toString().trim());
         mNewsPresenter.attachView(this);
         mPresenter = mNewsPresenter;
+        mPresenter.onCreate();
+    }
+
+    private void initBusPresenter() {
+        mBusinessPresenter.setNewsTypeAndId(pageNum, numPerPage, mSearchEdit.getText().toString().trim());
+        mBusinessPresenter.attachView(this);
+        mPresenter = mBusinessPresenter;
+        mPresenter.onCreate();
+    }
+
+    private void initMeetPresenter() {
+        mMeetsPresenter.setNewsTypeAndId(pageNum, numPerPage, mSearchEdit.getText().toString().trim());
+        mMeetsPresenter.attachView(this);
+        mPresenter = mMeetsPresenter;
+        mPresenter.onCreate();
     }
 
     private void initRecyclerView() {
@@ -91,11 +154,20 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                 super.onScrollStateChanged(recyclerView, newState);
 
             }
-
         });
 
-        likeBeanList = new ArrayList<>();
-        mNewsListAdapter = new NewsAdapter(R.layout.layout_new_item, likeBeanList);
+        switch (searchIndex) {
+            case NewsType.TYPE_REFRESH_XUNXI:
+            case NewsType.TYPE_REFRESH_XIEHUI:
+                likeBeanList = new ArrayList<>();
+                mNewsListAdapter = new NewsAdapter(R.layout.layout_new_item, likeBeanList);
+                break;
+            case NewsType.TYPE_REFRESH_HUIWU:
+                meetList = new ArrayList<>();
+                mNewsListAdapter = new MeetingsAdapter(R.layout.layout_meeting_item, meetList);
+                break;
+        }
+
         mNewsListAdapter.setOnLoadMoreListener(this);
         mNewsListAdapter.setOnRecyclerViewItemClickListener(this);
         mNewsRV.setAdapter(mNewsListAdapter);
@@ -104,20 +176,45 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     @OnClick(R.id.search_cancel)
     public void touchSearch(View v) {
-        initPresenter();
-        if (mPresenter != null)
-            mPresenter.onCreate();
+        this.finish();
     }
 
     @Override
     public void onRefresh() {
-        mNewsPresenter.refreshData();
+        switch (searchIndex) {
+            case NewsType.TYPE_REFRESH_XUNXI:
+                mNewsPresenter.refreshData();
+                break;
+            case NewsType.TYPE_REFRESH_XIEHUI:
+                mBusinessPresenter.refreshData();
+                break;
+            case NewsType.TYPE_REFRESH_HUIWU:
+                mMeetsPresenter.refreshData();
+                break;
+        }
     }
 
     @Override
-    public void setNewsList(List<LikeBean> newsBean, @LoadNewsType.checker int loadType) {
-        mNewsListAdapter.addData(newsBean);
-        mSwipeRefreshLayout.setRefreshing(false);
+    public void setNewsList(List<BaseNewBean> newsBean, @LoadNewsType.checker int loadType) {
+        switch (loadType) {
+            case LoadNewsType.TYPE_REFRESH_SUCCESS:
+                mSwipeRefreshLayout.setRefreshing(false);
+                mNewsListAdapter.setNewData(newsBean);
+                break;
+            case LoadNewsType.TYPE_REFRESH_ERROR:
+                mSwipeRefreshLayout.setRefreshing(false);
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
+                if (newsBean == null || newsBean.size() == 0) {
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_ERROR:
+
+                break;
+        }
     }
 
     @Override
@@ -141,11 +238,124 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     @Override
     public void onItemClick(View view, int i) {
-
+        switch (searchIndex) {
+            case NewsType.TYPE_REFRESH_XUNXI:
+            case NewsType.TYPE_REFRESH_XIEHUI:
+                goToNewsDetailActivity(view,i);
+                break;
+        }
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mNewsPresenter.loadMore();
+        switch (searchIndex) {
+            case NewsType.TYPE_REFRESH_XUNXI:
+                mNewsPresenter.loadMore();
+                break;
+            case NewsType.TYPE_REFRESH_XIEHUI:
+                mBusinessPresenter.loadMore();
+                break;
+            case NewsType.TYPE_REFRESH_HUIWU:
+                mMeetsPresenter.loadMore();
+                break;
+        }
+    }
+
+    @Override
+    public void setMeetingList(List<MeetingBean> newsBean, @LoadNewsType.checker int loadType) {
+        switch (loadType) {
+            case LoadNewsType.TYPE_REFRESH_SUCCESS:
+                mSwipeRefreshLayout.setRefreshing(false);
+                mNewsListAdapter.setNewData(newsBean);
+                break;
+            case LoadNewsType.TYPE_REFRESH_ERROR:
+                mSwipeRefreshLayout.setRefreshing(false);
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
+                if (newsBean == null || newsBean.size() == 0) {
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_ERROR:
+
+                break;
+        }
+    }
+
+    @Override
+    public void setBusinessList(List<BaseNewBean> newsBean, @LoadNewsType.checker int loadType) {
+        switch (loadType) {
+            case LoadNewsType.TYPE_REFRESH_SUCCESS:
+                mSwipeRefreshLayout.setRefreshing(false);
+                mNewsListAdapter.setNewData(newsBean);
+                break;
+            case LoadNewsType.TYPE_REFRESH_ERROR:
+                mSwipeRefreshLayout.setRefreshing(false);
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
+                if (newsBean == null || newsBean.size() == 0) {
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_ERROR:
+
+                break;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void goToNewsDetailActivity(View view, int position) {
+        Intent intent = setIntent(position);
+        startActivity(view, intent);
+    }
+
+    @NonNull
+    private Intent setIntent(int position) {
+        List<BaseNewBean> newsSummaryList = mNewsListAdapter.getData();
+        Intent intent = new Intent(mActivity, NewDetailActivity.class);
+        intent.putExtra(Constants.NEWS_POST_ID, newsSummaryList.get(position).getId()+"");
+        intent.putExtra(Constants.NEWS_TYPE,searchIndex+"");
+        return intent;
+    }
+
+    private void startActivity(View view, Intent intent) {
+        ImageView newsSummaryPhotoIv = (ImageView) view.findViewById(R.id.item_img_bg);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(mActivity, newsSummaryPhotoIv, Constants.TRANSITION_ANIMATION_NEWS_PHOTOS);
+            startActivity(intent, options.toBundle());
+        } else {
+
+            //让新的Activity从一个小的范围扩大到全屏
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeScaleUpAnimation(view, view.getWidth() / 2, view.getHeight() / 2, 0, 0);
+            ActivityCompat.startActivity(mActivity, intent, options.toBundle());
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId==EditorInfo.IME_ACTION_SEARCH ||(keyEvent!=null&&keyEvent.getKeyCode()== KeyEvent.KEYCODE_ENTER))
+        {
+           //TODO do something;
+            switch (searchIndex) {
+                case NewsType.TYPE_REFRESH_XUNXI:
+                    initNewsPresenter();
+                    break;
+                case NewsType.TYPE_REFRESH_XIEHUI:
+                    initBusPresenter();
+                    break;
+                case NewsType.TYPE_REFRESH_HUIWU:
+                    initMeetPresenter();
+                    break;
+            }
+            return true;
+        }
+        return false;
+
     }
 }

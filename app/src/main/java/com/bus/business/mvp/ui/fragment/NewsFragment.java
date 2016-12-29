@@ -60,7 +60,7 @@ import static android.view.View.VISIBLE;
  */
 public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout.OnRefreshListener
         , NewsView<List<BaseNewBean>>
-,BusinessView
+        , BusinessView
         , BaseQuickAdapter.RequestLoadMoreListener
         , BaseQuickAdapter.OnRecyclerViewItemClickListener
         , BaseSliderView.OnSliderClickListener {
@@ -215,8 +215,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
 
             //add your extra information
             Bundle bundle = new Bundle();
-            bundle.putString("typeId", pageIconBean.getTypes());
-            bundle.putString("id", pageIconBean.getTitle());
+            bundle.putString("id", pageIconBean.getId()+"");
             textSliderView.bundle(bundle);
             sliderLayout.addSlider(textSliderView);
         }
@@ -373,8 +372,11 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         if (bundle == null) {
             return;
         }
-        String typeId = bundle.getString("typeId");
-        String id = bundle.getString("id");
+        Intent intent = new Intent(mActivity, NewDetailActivity.class);
+        intent.putExtra(Constants.NEWS_POST_ID, bundle.getString("id"));
+        intent.putExtra(Constants.NEWS_TYPE,"1");
+        startActivity(sliderLayout,intent);
+
     }
 
     @Override

@@ -150,10 +150,11 @@ public class RetrofitManager {
         map.put("numPerPage", numPerPage + "");
         map.put("userId", UsrMgr.getUseId());
         if (!TextUtils.isEmpty(meetingName))
-            map.put("meetingName", "");
+            map.put("meetingName",meetingName);
         KLog.a(map.toString());
         return mNewsService.getMeetingsList(map);
     }
+
 
     public Observable<RspUserBean> getLoginInObservable(String phoneNum, String password) {
         Map<String, String> map = new HashMap<>();
@@ -185,6 +186,15 @@ public class RetrofitManager {
         return mNewsService.getNewsBodyHtmlPhoto(photoPath);
     }
 
+    public Observable<BaseRspObj> joinMeeting(int meetingId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("meetingId", meetingId+"");
+        map.put("userId",UsrMgr.getUseId());
+        map.put("joinType","1");
+        KLog.a(map.toString());
+        return mNewsService.joinMeeting(map);
+    }
+
     public Observable<RspBusinessBean> getBusinessListObservable(int pageNum, int numPerPage, String title) {
         Map<String, String> map = new HashMap<>();
         map.put("pageNum", pageNum + "");
@@ -203,4 +213,13 @@ public class RetrofitManager {
         KLog.a(map.toString());
         return mNewsService.getRevisePassword(map);
     }
+
+    public Observable<BaseRspObj> signInMeeting(String meetingId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("meetingId", meetingId);
+        map.put("userId",UsrMgr.getUseId());
+        KLog.a(map.toString());
+        return mNewsService.signInMeeting(map);
+    }
+
 }

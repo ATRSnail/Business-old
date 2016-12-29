@@ -55,6 +55,24 @@ public interface NewsService {
     @POST(ApiConstants.REVISE_PASSWORD_URL)
     Observable<BaseRspObj> getRevisePassword(@FieldMap Map<String, String> map);
 
+    /**
+     * 参会
+     * @param map
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(ApiConstants.JOIN_MEETING_URL)
+    Observable<BaseRspObj> joinMeeting(@FieldMap Map<String, String> map);
+
+    /**
+     * 签到
+     * @param map
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(ApiConstants.SIGN_IN_URL)
+    Observable<BaseRspObj> signInMeeting(@FieldMap Map<String, String> map);
+
     @POST(ApiConstants.BANNER_URL)
     Observable<RspBannerBean> getBanners();
 

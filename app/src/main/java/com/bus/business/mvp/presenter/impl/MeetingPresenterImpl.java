@@ -1,16 +1,13 @@
 package com.bus.business.mvp.presenter.impl;
 
 import com.bus.business.common.LoadNewsType;
-import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.interactor.NewsInteractor;
 import com.bus.business.mvp.interactor.impl.MeetingInteractorImpl;
 import com.bus.business.mvp.presenter.NewsPresenter;
 import com.bus.business.mvp.presenter.base.BasePresenterImpl;
-import com.bus.business.mvp.view.NewsView;
+import com.bus.business.mvp.view.MeetingView;
 import com.socks.library.KLog;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,7 +16,7 @@ import javax.inject.Inject;
  * @version 1.0
  * @create_date 16/12/24
  */
-public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<List<MeetingBean>>, RspMeetingBean>
+public class MeetingPresenterImpl extends BasePresenterImpl<MeetingView,RspMeetingBean>
         implements NewsPresenter {
 
     private NewsInteractor<RspMeetingBean> mNewsInteractor;
@@ -54,7 +51,7 @@ public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<List<Meetin
         super.onError(errorMsg);
         if (mView != null) {
             int loadType = mIsRefresh ? LoadNewsType.TYPE_REFRESH_ERROR : LoadNewsType.TYPE_LOAD_MORE_ERROR;
-            mView.setNewsList(null, loadType);
+            mView.setMeetingList(null, loadType);
         }
     }
 
@@ -67,7 +64,7 @@ public class MeetingPresenterImpl extends BasePresenterImpl<NewsView<List<Meetin
         int loadType = mIsRefresh ? LoadNewsType.TYPE_REFRESH_SUCCESS : LoadNewsType.TYPE_LOAD_MORE_SUCCESS;
 
         if (mView != null) {
-            mView.setNewsList(data.getBody().getMeetingList(), loadType);
+            mView.setMeetingList(data.getBody().getMeetingList(), loadType);
             mView.hideProgress();
         }
     }

@@ -19,7 +19,7 @@ import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.presenter.impl.MeetingPresenterImpl;
 import com.bus.business.mvp.ui.adapter.MeetingsAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
-import com.bus.business.mvp.view.NewsView;
+import com.bus.business.mvp.view.MeetingView;
 import com.bus.business.utils.NetUtil;
 import com.bus.business.widget.RecyclerViewDivider;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -38,7 +38,7 @@ import butterknife.BindView;
  * @create_date 16/12/23
  */
 public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
-        , NewsView<List<MeetingBean>>, BaseQuickAdapter.RequestLoadMoreListener {
+        , MeetingView, BaseQuickAdapter.RequestLoadMoreListener {
 
     @BindView(R.id.news_rv)
     RecyclerView mNewsRV;
@@ -106,14 +106,6 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     @Override
-    public void setNewsList(List<MeetingBean> newsBean, @LoadNewsType.checker int loadType) {
-//        checkIsEmpty(newsBean.getLikeList());
-        KLog.a(newsBean.toString());
-        mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean,true);
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
     public void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
     }
@@ -157,6 +149,30 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
         } else {
             mNewsRV.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void setMeetingList(List<MeetingBean> newsBean, @LoadNewsType.checker int loadType) {
+        //        checkIsEmpty(newsBean.getLikeList());
+        switch (loadType) {
+            case LoadNewsType.TYPE_REFRESH_SUCCESS:
+                mSwipeRefreshLayout.setRefreshing(false);
+                mNewsListAdapter.setNewData(newsBean);
+                break;
+            case LoadNewsType.TYPE_REFRESH_ERROR:
+                mSwipeRefreshLayout.setRefreshing(false);
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
+                if (newsBean == null || newsBean.size() == 0) {
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }
+                break;
+            case LoadNewsType.TYPE_LOAD_MORE_ERROR:
+
+                break;
         }
     }
 }

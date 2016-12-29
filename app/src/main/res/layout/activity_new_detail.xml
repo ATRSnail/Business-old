@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_main_header"/>
+    <include layout="@layout/layout_main_header" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -24,22 +24,43 @@
                 tools:text="习近平绿色发展理念引领中国环境治理新实践" />
 
             <TextView
-                android:id="@+id/news_detail_from_tv"
+                android:id="@+id/news_detail_fund_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/news_detail_title_tv"
-                android:layout_marginTop="10dp"
+                android:gravity="bottom"
+                android:paddingTop="15dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_size_20"
+                android:textStyle="bold"
+                tools:text="项目总投资5亿" />
+
+            <TextView
+                android:id="@+id/news_detail_from_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/news_detail_fund_tv"
+                android:layout_marginTop="15dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/text_size_14"
                 tools:text="澎湃新闻 06-06 17:24" />
 
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/news_detail_from_tv"
+                android:layout_marginTop="15dp"
+                android:background="@color/color_999999" />
+
             <TextView
                 android:id="@+id/news_detail_body_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/news_detail_from_tv"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/view"
+                android:layout_marginTop="15dp"
                 android:lineSpacingExtra="6dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/primary_text"

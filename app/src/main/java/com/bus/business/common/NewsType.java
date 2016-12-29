@@ -12,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class NewsType {
 
+    public static final String TYPE_SEARCH = "type_search";
     public static final int TYPE_REFRESH_XUNXI = 1;
     public static final int TYPE_REFRESH_XIEHUI = 2;
     public static final int TYPE_REFRESH_HUIWU = 3;

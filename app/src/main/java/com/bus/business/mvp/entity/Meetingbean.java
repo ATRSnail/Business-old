@@ -32,6 +32,24 @@ public class MeetingBean {
     private String meetingContent;
     private long ctime;
     private int areaId;
+    private String checkType;// 签到状态 0未签到 1已签到
+    private String joinType;// 参会状态 0未 1已
+
+    public boolean getJoinType() {
+        return joinType != null && joinType.equals("1");
+    }
+
+    public void setJoinType(boolean joinType) {
+        this.joinType = joinType ? "1" : "0";
+    }
+
+    public boolean getCheckType() {
+        return checkType != null && checkType.equals("1");
+    }
+
+    public void setCheckType(boolean checkType) {
+        this.checkType = checkType ? "1" : "0";
+    }
 
     public int getId() {
         return id;
@@ -123,7 +141,7 @@ public class MeetingBean {
 
     @Override
     public String toString() {
-        return "Meetingbean{" +
+        return "MeetingBean{" +
                 "id=" + id +
                 ", utime=" + utime +
                 ", meetingLoc='" + meetingLoc + '\'' +
@@ -135,6 +153,8 @@ public class MeetingBean {
                 ", meetingContent='" + meetingContent + '\'' +
                 ", ctime=" + ctime +
                 ", areaId=" + areaId +
+                ", checkType='" + checkType + '\'' +
+                ", joinType='" + joinType + '\'' +
                 '}';
     }
 }

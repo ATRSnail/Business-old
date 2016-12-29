@@ -9,10 +9,13 @@ import android.view.View;
 
 import com.bus.business.R;
 import com.bus.business.common.NewsType;
+import com.bus.business.mvp.event.ChangeSearchStateEvent;
 import com.bus.business.mvp.ui.activities.PlaceActivity;
 import com.bus.business.mvp.ui.adapter.ViewPageAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
 import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,7 @@ public class MainPagerFragment extends BaseFragment implements ViewPager.OnPageC
     @Override
     public void onPageSelected(int position) {
         KLog.a("position--->"+position);
+        EventBus.getDefault().post(new ChangeSearchStateEvent(position));
     }
 
     @Override

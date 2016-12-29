@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bus.business.R;
 import com.bus.business.mvp.entity.BannerBean;
+import com.bus.business.utils.DateUtil;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 
 /**
@@ -33,8 +34,9 @@ public class AutoSliderView extends BaseSliderView {
         ImageView img_vip = (ImageView) view.findViewById(R.id.item_vip_logo);
 //        img_vip.setVisibility(pageIconBean.getIsvip().equals("0") ? View.VISIBLE : View.GONE);
 //        title.setText(pageIconBean.getVfName());
-        item_type.setText(pageIconBean.getTitle());
-//        item_desc.setText(pageIconBean.getHit());
+        title.setText(pageIconBean.getTitle());
+        item_type.setText("工商联");
+        item_desc.setText(DateUtil.getCurGroupDay(pageIconBean.getCtime()));
         empty(R.mipmap.default_image);
         bindEventAndShow(view, imageView);
         return view;

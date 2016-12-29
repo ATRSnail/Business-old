@@ -23,7 +23,7 @@
 
 	<!-- 底栏字体颜色 -->
 	<color name="footer_text_color_normal">#343434</color>
-	<color name="footer_text_color_selected">#FF601C</color>
+	<color name="footer_text_color_selected">#0dadd5</color>
 
 	<!-- 字体颜色值 -->
 	<color name="text_color_blue">#0081E1</color>
@@ -73,9 +73,13 @@
 	<color name="blue_light">#0083FF</color>
 	<color name="gray_lighter">#F2F4F5</color>
 	<color name="color_333333">#333333</color>
+	<color name="color_666666">#666666</color>
 	<color name="color_999999">#999999</color>
 	<color name="color_e1dfdf">#e1dfdf</color>
 	<color name="color_1e9edc">#1e9edc</color>
+	<color name="color_3bd1f7">#3bd1f7</color>
+	<color name="color_fc5115">#fc5115</color>
+	<color name="color_0dadd5">#0dadd5</color>
 
 
 	<!--87%white-->

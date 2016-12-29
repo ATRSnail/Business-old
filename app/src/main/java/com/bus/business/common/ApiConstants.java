@@ -9,6 +9,8 @@ public class ApiConstants {
 
     public static final String NETEAST_HOST = "http://172.16.10.15:9300/";
 
+//    public static final String NETEAST_HOST = "http://59.108.94.40:9100/";
+
     public static String getHost() {
         return NETEAST_HOST;
     }
@@ -28,4 +30,8 @@ public class ApiConstants {
     public static final String BUSINESS_LIST_URL = "/gsl-api/gsl/business/businessList";
 
     public static final String REVISE_PASSWORD_URL = "/gsl-api/gsl/sysUser/upPass";
+
+    public static final String JOIN_MEETING_URL = "/gsl-api/gsl/meeting/join";
+
+    public static final String SIGN_IN_URL = "/gsl-api/gsl/meeting/signIn";
 }
