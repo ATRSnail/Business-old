@@ -4,7 +4,8 @@
     <!-- 页面名称 -->
     <string name="main_navigation_home">首页</string>
     <string name="main_navigation_im">会务</string>
-    <string name="main_navigation_interest">通讯录</string>
+    <string name="main_navigation_interest">万花筒</string>
+    <string name="main_navigation_expert">专家</string>
     <string name="main_navigation_user">我的</string>
 
     <string name="internet_error">网络异常,请检查网络设置</string>
@@ -44,5 +45,57 @@
         <item>延庆区</item>
         <item>密云区</item>
     </string-array>
+
+    <string-array name="actions_images">
+        <item>@mipmap/img_tagxzc</item>
+        <item>@mipmap/img_ba</item>
+        <item>@mipmap/img_bj_bank</item>
+        <item>@mipmap/img_bjnsyh</item>
+        <item>@mipmap/img_bjxf</item>
+        <item>@mipmap/img_cjt</item>
+        <item>@mipmap/img_dfjh</item>
+        <item>@mipmap/img_gjl</item>
+        <item>@mipmap/img_gs_bank</item>
+        <item>@mipmap/img_hm</item>
+        <item>@mipmap/img_hxyh</item>
+        <item>@mipmap/img_lfyh</item>
+        <item>@mipmap/img_pyq</item>
+        <item>@mipmap/img_rh</item>
+        <item>@mipmap/img_twaf</item>
+        <item>@mipmap/img_xyyh</item>
+        <item>@mipmap/img_yjs</item>
+        <item>@mipmap/img_yy</item>
+        <item>@mipmap/img_yz</item>
+        <item>@mipmap/img_zgmsyh</item>
+        <item>@mipmap/img_zgnyyh</item>
+        <item>@mipmap/img_zgyh</item>
+        <item>@mipmap/img_zjh</item>
+    </string-array>
+    <string-array name="actions_urls">
+        <item>http://www.atzuche.com/</item>
+        <item>http://www.rwybaoan.com/</item>
+        <item>http://www.bankofbeijing.com.cn/</item>
+        <item>http://www.bjrcb.com/</item>
+        <item>http://www.chanjet.com/</item>
+        <item>http://www.chanjet.com/</item>
+        <item>http://www.315job.com/</item>
+        <item>http://www.gujinlai.com/</item>
+        <item>http://www.icbc.com.cn</item>
+        <item>http://www.icbc.com.cn</item>
+        <item>http://www.hxb.com.cn/home/cn/</item>
+        <item>http://www.lccb.com.cn/</item>
+        <item>http://www.chanjet.com/collection</item>
+        <item>http://www.bjrhjt.cn/subject/subject-cylm.html</item>
+        <item>http://www.cnguardee.com/index.html</item>
+        <item>http://www.cib.com.cn/cn/index.html</item>
+        <item>https://www.yyfax.com/h5/activity/channel.html?code=lhbb</item>
+        <item>http://www.yonyou.com/index.html?t=0.9121916741132736</item>
+        <item>http://www.psbc.com/cn/index.html</item>
+        <item>http://www.cmbc.com.cn/</item>
+        <item>http://www.abchina.com/cn/</item>
+        <item>http://www.boc.cn/</item>
+        <item>http://www.zjhcpa.com.cn/</item>
+    </string-array>
+
 
 </resources>

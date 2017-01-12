@@ -25,8 +25,6 @@ import rx.Subscriber;
 
 public class NewDetailActivity extends BaseActivity {
 
-    private int pageNum = 1;
-    private int numPerPage = 20;
     private String newsId;
     private String newsType;
 
@@ -118,7 +116,7 @@ public class NewDetailActivity extends BaseActivity {
         mTitle.setText(bean.getTitle());
         mFrom.setText("工商联  "+ DateUtil.getCurGroupDay(bean.getUtime()));
         mFundTv.setText("项目总投资"+bean.getInAmount()+"亿元");
-        mUrlImageGetter = new URLImageGetter(mNewsDetailBodyTv, bean.getContentS(), 1);
+        mUrlImageGetter = new URLImageGetter(mNewsDetailBodyTv, bean.getContentS(), 2);
         mNewsDetailBodyTv.setText(Html.fromHtml(bean.getContentS(),mUrlImageGetter,null));
     }
 }

@@ -16,6 +16,7 @@ import com.bus.business.common.LoadNewsType;
 import com.bus.business.common.UsrMgr;
 import com.bus.business.mvp.entity.LikeBean;
 import com.bus.business.mvp.entity.MeetingBean;
+import com.bus.business.mvp.event.JoinToMeetingEvent;
 import com.bus.business.mvp.presenter.impl.MeetingPresenterImpl;
 import com.bus.business.mvp.ui.adapter.MeetingsAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
@@ -24,6 +25,9 @@ import com.bus.business.utils.NetUtil;
 import com.bus.business.widget.RecyclerViewDivider;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +42,7 @@ import butterknife.BindView;
  * @create_date 16/12/23
  */
 public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
-        , MeetingView, BaseQuickAdapter.RequestLoadMoreListener {
+        , MeetingView, BaseQuickAdapter.RequestLoadMoreListener, BaseQuickAdapter.OnRecyclerViewItemClickListener {
 
     @BindView(R.id.news_rv)
     RecyclerView mNewsRV;
@@ -53,7 +57,7 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
     Activity mActivity;
     @Inject
     MeetingPresenterImpl mNewsPresenter;
-    private BaseQuickAdapter mNewsListAdapter;
+    private BaseQuickAdapter<MeetingBean> mNewsListAdapter;
     private List<MeetingBean> likeBeanList;
 
 
@@ -66,6 +70,7 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
 
     @Override
     public void initViews(View view) {
+        EventBus.getDefault().register(this);
         initSwipeRefreshLayout();
         initRecyclerView();
         initPresenter();
@@ -83,8 +88,8 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     private void initPresenter() {
-        KLog.a("userInfo--->"+UsrMgr.getUseInfo().toString());
-        mNewsPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage,"");
+        KLog.a("userInfo--->" + UsrMgr.getUseInfo().toString());
+        mNewsPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage, "");
         mPresenter = mNewsPresenter;
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -100,7 +105,8 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
         likeBeanList = new ArrayList<>();
         mNewsListAdapter = new MeetingsAdapter(R.layout.layout_meeting_item, likeBeanList);
         mNewsListAdapter.setOnLoadMoreListener(this);
-        mNewsListAdapter.openLoadMore(20,true);
+        mNewsListAdapter.openLoadMore(20, true);
+        mNewsListAdapter.setOnRecyclerViewItemClickListener(this);
         mNewsRV.setAdapter(mNewsListAdapter);
 
     }
@@ -174,5 +180,23 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
 
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int i) {
+        mNewsListAdapter.getData().get(i).intentToDetail(mActivity,i);
+    }
+
+    @Subscribe
+    public void onEventMainThread(JoinToMeetingEvent event) {
+        KLog.d("harvic", mNewsListAdapter.getData().get(event.getPos()).getJoinType());
+        mNewsListAdapter.getData().get(event.getPos()).setJoinType(true);
+        mNewsListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 }

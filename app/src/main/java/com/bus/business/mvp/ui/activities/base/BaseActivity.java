@@ -56,7 +56,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends ActionBarAct
         setContentView(layoutId);
         initInjector();
         ButterKnife.bind(this);
-        initViews();
 
         if (mPresenter != null){
             mPresenter.onCreate();
@@ -72,7 +71,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends ActionBarAct
                 }
             });
         }
-
+        initViews();
     }
 
     public void setCustomTitle(String title) {

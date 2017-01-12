@@ -32,7 +32,7 @@ import butterknife.OnClick;
  */
 public class MainPagerFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
-    private static final String[] TITLE = {"讯息","协会+"};
+    private static final String[] TITLE = {"新闻 • 简讯","商情 • 资讯"};
 
     @BindView(R.id.tabs)
     TabLayout mTabLayout;

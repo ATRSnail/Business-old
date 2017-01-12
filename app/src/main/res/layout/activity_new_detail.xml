@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <include layout="@layout/layout_main_header" />
@@ -75,6 +76,21 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="200dp" />
+
+            <TextView
+                android:id="@+id/img_add"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/news_detail_body_tv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/blue_circle_5"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:text="参会"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
         </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>

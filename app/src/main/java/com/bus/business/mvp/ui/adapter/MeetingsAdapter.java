@@ -7,6 +7,7 @@ import com.bus.business.R;
 import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.entity.response.base.BaseRspObj;
 import com.bus.business.repository.network.RetrofitManager;
+import com.bus.business.utils.DateUtil;
 import com.bus.business.utils.TransformUtils;
 import com.bus.business.utils.UT;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,7 +31,7 @@ public class MeetingsAdapter extends BaseQuickAdapter<MeetingBean> {
     protected void convert(BaseViewHolder baseViewHolder, MeetingBean likeBean) {
         baseViewHolder.setText(R.id.tv_name, likeBean.getMeetingName());
         baseViewHolder.setText(R.id.tv_address, likeBean.getMeetingLoc());
-        baseViewHolder.setText(R.id.tv_date, likeBean.getMeetingTime() + "");
+        baseViewHolder.setText(R.id.tv_date, DateUtil.getCurGroupDay(likeBean.getMeetingTime()));
 
         TextView addText = baseViewHolder.getView(R.id.img_add);
         addText.setText(likeBean.getJoinType()?"已参会":"参会");
@@ -40,21 +41,21 @@ public class MeetingsAdapter extends BaseQuickAdapter<MeetingBean> {
 
     class addClickListener implements View.OnClickListener {
         private TextView tv;
-        private MeetingBean likeBean;
+        private MeetingBean meetingBean;
 
         public addClickListener(TextView tv, MeetingBean likeBean) {
             this.tv = tv;
-            this.likeBean = likeBean;
+            this.meetingBean = likeBean;
         }
 
         @Override
         public void onClick(View view) {
-            if (likeBean.getJoinType()){
+            if (meetingBean.getJoinType()){
                 UT.show("已参会");
                 return;
             }
 
-            RetrofitManager.getInstance(1).joinMeeting(likeBean.getId())
+            RetrofitManager.getInstance(1).joinMeeting(meetingBean.getId())
                     .compose(TransformUtils.<BaseRspObj>defaultSchedulers())
                     .subscribe(new Subscriber<BaseRspObj>() {
                         @Override
@@ -72,7 +73,7 @@ public class MeetingsAdapter extends BaseQuickAdapter<MeetingBean> {
                             if (responseBody.getHead().getRspCode().equals("0")) {
                                 tv.setBackgroundResource(R.drawable.grey_circle_5);
                                 tv.setText("已参会");
-                                likeBean.setJoinType(true);
+                                meetingBean.setJoinType(true);
                             }
                             UT.show(responseBody.getHead().getRspMsg());
 

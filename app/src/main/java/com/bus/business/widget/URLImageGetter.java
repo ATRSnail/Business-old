@@ -101,9 +101,10 @@ public class URLImageGetter implements Html.ImageGetter {
 
                     @Override
                     public void onNext(Boolean isLoadSuccess) {
-                        KLog.i();
                         mPicCount++;
-                        if (isLoadSuccess && (mPicCount == mPicTotal - 1)) {
+                        KLog.d("source--->"+mPicCount+"----"+mPicTotal);
+                        if (isLoadSuccess) {
+                            KLog.i("isloadSuccess--->"+isLoadSuccess);
                             mTextView.setText(Html.fromHtml(mNewsBody, URLImageGetter.this, null));
                         }
                     }

@@ -1,12 +1,21 @@
 package com.bus.business.mvp.entity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.bus.business.mvp.ui.activities.MeetingDetailActivity;
+
+import java.io.Serializable;
+
 /**
  * @author xch
  * @version 1.0
  * @create_date 16/12/24
  */
-public class MeetingBean {
-
+public class MeetingBean implements Serializable{
+    public static final String MEETINGBEAN = "meeting_bean";
+    public static final String MEETINGPOS = "meeting_pos";
     /**
      * id : 1
      * utime : 1482723070000
@@ -34,6 +43,15 @@ public class MeetingBean {
     private int areaId;
     private String checkType;// 签到状态 0未签到 1已签到
     private String joinType;// 参会状态 0未 1已
+
+    public void intentToDetail(Context context,int pos){
+        Intent intent = new Intent(context,MeetingDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MEETINGBEAN,this);
+        bundle.putInt(MEETINGPOS,pos);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
 
     public boolean getJoinType() {
         return joinType != null && joinType.equals("1");

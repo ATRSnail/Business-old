@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/white"
+    android:layout_marginBottom="1dp"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
     app:navigationIcon="@mipmap/left_arrow">
@@ -15,6 +16,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
+        android:maxWidth="200dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         tools:text="ddd"
         android:textColor="@color/gray"
         android:textSize="@dimen/sp_16" />
@@ -58,6 +63,5 @@
             android:text="@string/plz_search_hint" />
 
     </RelativeLayout>
-
 
 </android.support.v7.widget.Toolbar>

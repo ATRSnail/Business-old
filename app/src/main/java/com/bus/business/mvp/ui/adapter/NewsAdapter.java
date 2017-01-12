@@ -31,7 +31,7 @@ public class NewsAdapter extends BaseQuickAdapter<BaseNewBean> {
         baseViewHolder.setText(R.id.item_desc, DateUtil.getCurGroupDay(likeModel.getCtime()));
         baseViewHolder.setText(R.id.item_type, "工商联");
 
-        ImageView img = baseViewHolder.getView(R.id.item_img_bg);
+        ImageView img = baseViewHolder.getView(R.id.daimajia_slider_image);
 
         Glide.with(App.getAppContext()).load(ApiConstants.NETEAST_HOST+likeModel.getFmImg()).asBitmap() // gif格式有时会导致整体图片不显示，貌似有冲突
                 .format(DecodeFormat.PREFER_ARGB_8888)

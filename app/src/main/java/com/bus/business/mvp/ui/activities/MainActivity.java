@@ -21,6 +21,7 @@ import com.bus.business.mvp.ui.activities.base.BaseActivity;
 import com.bus.business.mvp.ui.fragment.MainPagerFragment;
 import com.bus.business.mvp.ui.fragment.MeetingFragment;
 import com.bus.business.mvp.ui.fragment.MineFragment;
+import com.bus.business.mvp.ui.fragment.WanFragment;
 import com.bus.business.repository.network.RetrofitManager;
 import com.bus.business.utils.TransformUtils;
 import com.bus.business.utils.UT;
@@ -77,11 +78,14 @@ public class MainActivity extends BaseActivity {
                     case R.id.foot_bar_im:
                         chageIndex(1);
                         break;
-                    case R.id.foot_bar_interest:
+                    case R.id.foot_bar_wan:
                         chageIndex(2);
                         break;
-                    case R.id.main_footbar_user:
+                    case R.id.foot_bar_financial:
                         chageIndex(3);
+                        break;
+                    case R.id.main_footbar_user:
+                        chageIndex(4);
                         break;
                     default:
                         break;
@@ -95,7 +99,7 @@ public class MainActivity extends BaseActivity {
 
     private void initData() {
         currIndex = 0;
-        fragmentTags = new ArrayList<>(Arrays.asList("HomeFragment", "ImFragment", "InterestFragment", "MemberFragment"));
+        fragmentTags = new ArrayList<>(Arrays.asList("HomeFragment", "ImFragment", "InterestFragment","FinancialFragment", "MemberFragment"));
     }
 
     private void chageIndex(int index) {
@@ -151,8 +155,10 @@ public class MainActivity extends BaseActivity {
     private String setTabSelection(int index) {
         switch (index) {
             case 2:
-                return "通讯录";
+                return "万花筒";
             case 3:
+                return "金融";
+            case 4:
                 return "我的";
         }
         return "";
@@ -186,8 +192,10 @@ public class MainActivity extends BaseActivity {
             case 1:
                 return new MeetingFragment();
             case 2:
-                return new MainPagerFragment();
+                return new WanFragment();
             case 3:
+                return new WanFragment();
+            case 4:
                 return new MineFragment();
             default:
                 return null;

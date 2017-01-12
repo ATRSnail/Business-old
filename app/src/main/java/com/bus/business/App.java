@@ -10,6 +10,8 @@ import com.bus.business.di.component.DaggerApplicationComponent;
 import com.bus.business.di.module.ApplicationModule;
 import com.socks.library.KLog;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * @author xch
  * @version 1.0
@@ -34,6 +36,9 @@ public class App extends Application{
         initActivityLifecycleLogs();
         initApplicationComponent();
         KLog.init(BuildConfig.LOG_DEBUG);
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+        KLog.a("RegistrationID---->"+JPushInterface.getRegistrationID(this));
     }
 
 //    private void initLeakCanary() {

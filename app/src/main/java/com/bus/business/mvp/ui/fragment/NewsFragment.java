@@ -37,11 +37,12 @@ import com.bus.business.mvp.view.NewsView;
 import com.bus.business.repository.network.RetrofitManager;
 import com.bus.business.utils.NetUtil;
 import com.bus.business.utils.TransformUtils;
-import com.bus.business.widget.AutoSliderView;
+import com.bus.business.widget.RecyclerViewDivider;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,12 +168,14 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
 
     private void initRecyclerView() {
         mNewsRV.setHasFixedSize(true);
+        mNewsRV.addItemDecoration(new RecyclerViewDivider(mActivity,
+                LinearLayoutManager.VERTICAL, 2, getResources().getColor(R.color.red)));
         mNewsRV.setLayoutManager(new LinearLayoutManager(mActivity,
                 LinearLayoutManager.VERTICAL, false));
         mNewsRV.setItemAnimator(new DefaultItemAnimator());
 
         likeBeanList = new ArrayList<>();
-        mNewsListAdapter = new NewsAdapter(R.layout.layout_new_item, likeBeanList);
+        mNewsListAdapter = new NewsAdapter(R.layout.item_news, likeBeanList);
         mNewsListAdapter.setOnLoadMoreListener(this);
         if (isXunFrg) {
             mNewsListAdapter.addHeaderView(weatherView);
@@ -205,7 +208,8 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         if (!isXunFrg) return;
         mSlideHeader.setVisibility(VISIBLE);
         for (BannerBean pageIconBean : mList) {
-            AutoSliderView textSliderView = new AutoSliderView(this.getActivity(), pageIconBean);
+//            AutoSliderView textSliderView = new AutoSliderView(this.getActivity(), pageIconBean);
+            TextSliderView textSliderView = new TextSliderView(this.getActivity());
             // initialize a SliderLayout
             textSliderView
                     .description(pageIconBean.getTitle())
@@ -352,7 +356,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     }
 
     private void startActivity(View view, Intent intent) {
-        ImageView newsSummaryPhotoIv = (ImageView) view.findViewById(R.id.item_img_bg);
+        ImageView newsSummaryPhotoIv = (ImageView) view.findViewById(R.id.daimajia_slider_image);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation(mActivity, newsSummaryPhotoIv, Constants.TRANSITION_ANIMATION_NEWS_PHOTOS);

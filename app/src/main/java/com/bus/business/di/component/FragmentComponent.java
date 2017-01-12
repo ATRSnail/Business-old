@@ -9,6 +9,7 @@ import com.bus.business.di.scope.PerFragment;
 import com.bus.business.mvp.ui.fragment.MainPagerFragment;
 import com.bus.business.mvp.ui.fragment.MeetingFragment;
 import com.bus.business.mvp.ui.fragment.NewsFragment;
+import com.bus.business.mvp.ui.fragment.WanFragment;
 
 import dagger.Component;
 
@@ -31,4 +32,6 @@ public interface FragmentComponent {
     void inject(MainPagerFragment fragment);
     void inject(NewsFragment fragment);
     void inject(MeetingFragment fragment);
+
+    void inject(WanFragment wanFragment);
 }

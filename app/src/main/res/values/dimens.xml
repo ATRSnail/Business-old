@@ -23,7 +23,7 @@
     <dimen name="margin_large">30dp</dimen>
     <dimen name="margin_large_more">35dp</dimen>
 
-    <dimen name="item_margin">8dp</dimen>
+    <dimen name="item_margin">15dp</dimen>
     <dimen name="big_medium">20sp</dimen>
 
 
