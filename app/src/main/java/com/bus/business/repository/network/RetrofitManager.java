@@ -13,6 +13,7 @@ import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
 import com.bus.business.mvp.entity.response.RspUserBean;
+import com.bus.business.mvp.entity.response.RspWeatherBean;
 import com.bus.business.mvp.entity.response.base.BaseRspObj;
 import com.bus.business.utils.NetUtil;
 import com.socks.library.KLog;
@@ -166,6 +167,10 @@ public class RetrofitManager {
 
     public Observable<RspBannerBean> getBannersObservable() {
         return mNewsService.getBanners();
+    }
+
+    public Observable<RspWeatherBean> getWeatherObservable() {
+        return mNewsService.getWeather();
     }
 
     public Observable<RspNewDetailBean> getNewDetailObservable(String newsId) {

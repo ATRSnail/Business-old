@@ -30,6 +30,7 @@ public class SplashActivity extends FragmentActivity {
             public void run() {
                 cls = LoginActivity.class;
                 startActivity(new Intent(SplashActivity.this, cls));
+                SplashActivity.this.finish();
             }
         }, 500);
     }

@@ -57,6 +57,13 @@
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
+    <style name="about_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
     <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.NoActionBar" />
 
     <!-- 自适应TextView -->

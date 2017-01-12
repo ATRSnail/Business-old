@@ -26,6 +26,8 @@
     <string name="search_hint">搜索会务</string>
     <string name="cancel_string">取消</string>
 
+    <string name="second_back_hint">再按一次退出程序</string>
+
     <string-array name="city_list">
         <item>市工商联</item>
         <item>东城区</item>

@@ -8,6 +8,7 @@ import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
 import com.bus.business.mvp.entity.response.RspUserBean;
+import com.bus.business.mvp.entity.response.RspWeatherBean;
 import com.bus.business.mvp.entity.response.base.BaseRspObj;
 
 import java.util.Map;
@@ -75,6 +76,9 @@ public interface NewsService {
 
     @POST(ApiConstants.BANNER_URL)
     Observable<RspBannerBean> getBanners();
+
+    @POST(ApiConstants.WEATHER_URL)
+    Observable<RspWeatherBean> getWeather();
 
     @GET
     Observable<ResponseBody> getNewsBodyHtmlPhoto(

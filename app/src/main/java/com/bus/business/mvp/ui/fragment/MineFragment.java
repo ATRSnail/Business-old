@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.bus.business.R;
 import com.bus.business.common.UsrMgr;
 import com.bus.business.mvp.entity.UserBean;
+import com.bus.business.mvp.ui.activities.AboutActivity;
 import com.bus.business.mvp.ui.activities.RetPasswordActivity;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
 
@@ -47,11 +48,14 @@ public class MineFragment extends BaseFragment{
     }
 
 
-    @OnClick({R.id.tv_account_manager})
+    @OnClick({R.id.tv_account_manager,R.id.about_us})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.tv_account_manager:
                 startActivity(new Intent(getActivity(), RetPasswordActivity.class));
+                break;
+            case R.id.about_us:
+                startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
         }
     }

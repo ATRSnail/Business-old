@@ -24,6 +24,7 @@ public class ApiConstants {
     public static final String LOGIN_IN_URL = "/gsl-api/gsl/sysUser/login";
 
     public static final String BANNER_URL = "/gsl-api/gsl/news/newsBannerList";
+    public static final String WEATHER_URL = "/gsl-api/gsl/meeting/join";
 
     public static final String NEW_DETAIL_URL = "/gsl-api/gsl/news/getNews";
 

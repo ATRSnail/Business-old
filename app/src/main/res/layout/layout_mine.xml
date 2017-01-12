@@ -101,6 +101,7 @@
             android:background="@mipmap/list_view_divider" />
 
         <TextView
+            android:id="@+id/about_us"
             style="@style/mine_text"
             android:text="@string/about" />
 

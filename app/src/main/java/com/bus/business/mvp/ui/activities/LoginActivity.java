@@ -78,6 +78,7 @@ public class LoginActivity extends BaseActivity {
                         UsrMgr.cacheUserInfo(new Gson().toJson(rspUserBean.getBody().getUser()));
                         KLog.a("userInfo--->"+UsrMgr.getUseInfo().toString());
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        LoginActivity.this.finish();
                     }
                 });
 

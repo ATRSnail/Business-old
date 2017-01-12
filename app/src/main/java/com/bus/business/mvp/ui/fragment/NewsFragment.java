@@ -25,7 +25,10 @@ import com.bus.business.common.Constants;
 import com.bus.business.common.LoadNewsType;
 import com.bus.business.common.NewsType;
 import com.bus.business.mvp.entity.BannerBean;
+import com.bus.business.mvp.entity.WeatherBean;
+import com.bus.business.mvp.entity.WeathersBean;
 import com.bus.business.mvp.entity.response.RspBannerBean;
+import com.bus.business.mvp.entity.response.RspWeatherBean;
 import com.bus.business.mvp.entity.response.base.BaseNewBean;
 import com.bus.business.mvp.presenter.impl.BusinessPresenterImpl;
 import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
@@ -38,6 +41,7 @@ import com.bus.business.repository.network.RetrofitManager;
 import com.bus.business.utils.NetUtil;
 import com.bus.business.utils.TransformUtils;
 import com.bus.business.widget.RecyclerViewDivider;
+import com.bus.business.widget.autofittextview.AutofitTextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -81,7 +85,13 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     private View mSlideHeader;
     private SliderLayout sliderLayout;
     private PagerIndicator pagerIndicator;
+    private AutofitTextView tv_maxW;
+    private TextView tv_dayTxt;
+    private TextView tv_carNoLimit;
+    private TextView tv_pmten;
+    private TextView tv_times;
 
+    private WeatherBean weatherBean;
     @Inject
     Activity mActivity;
     @Inject
@@ -125,6 +135,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         initRecyclerView();
         initPresenter();
         loadBannerData();
+        loadWeather();
     }
 
     private void initIntentData() {
@@ -134,11 +145,16 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
 
     private void initHeadView() {
         if (!isXunFrg) return;
-        weatherView = View.inflate(getContext(), R.layout.layout_weather, null);
+        weatherView = View.inflate(mActivity, R.layout.layout_weather, null);
         mTitleHeader = View.inflate(mActivity, R.layout.layout_head_text, null);
         mSlideHeader = View.inflate(mActivity, R.layout.layout_autoloop_viewpage, null);
         sliderLayout = (SliderLayout) mSlideHeader.findViewById(R.id.slider);
         pagerIndicator = (PagerIndicator) mSlideHeader.findViewById(R.id.custom_indicator);
+        tv_maxW = (AutofitTextView) weatherView.findViewById(R.id.tv_maxW);
+        tv_dayTxt = (TextView) weatherView.findViewById(R.id.tv_dayTxt);
+        tv_carNoLimit = (TextView) weatherView.findViewById(R.id.tv_carNoLimit);
+        tv_pmten = (TextView) weatherView.findViewById(R.id.tv_pmten);
+        tv_times = (TextView) weatherView.findViewById(R.id.tv_times);
     }
 
     @Override
@@ -152,13 +168,13 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     }
 
     private void initPresenter() {
-        if (isXunFrg){
-            mNewsPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage,"");
+        if (isXunFrg) {
+            mNewsPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage, "");
             mNewsPresenter.attachView(this);
             mPresenter = mNewsPresenter;
             mPresenter.onCreate();
-        }else {
-            mBusinessPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage,"");
+        } else {
+            mBusinessPresenter.setNewsTypeAndId(pageNum, Constants.numPerPage, "");
             mBusinessPresenter.attachView(this);
             mPresenter = mBusinessPresenter;
             mPresenter.onCreate();
@@ -219,10 +235,19 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
 
             //add your extra information
             Bundle bundle = new Bundle();
-            bundle.putString("id", pageIconBean.getId()+"");
+            bundle.putString("id", pageIconBean.getId() + "");
             textSliderView.bundle(bundle);
             sliderLayout.addSlider(textSliderView);
         }
+    }
+
+    private void initWeatherData(WeathersBean weathersBean) {
+        weatherBean = weathersBean.getWeather();
+        tv_maxW.setText(weatherBean.getMaxW());
+        tv_dayTxt.setText(weatherBean.getDayTxt());
+        tv_carNoLimit.setText(weathersBean.getCarNoLimit());
+        tv_pmten.setText(weatherBean.getPmten());
+        tv_times.setText(weatherBean.getTimes());
     }
 
     private void loadBannerData() {
@@ -243,6 +268,29 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
                     @Override
                     public void onNext(RspBannerBean rspBannerBean) {
                         initSlider(rspBannerBean.getBody().getNewsBannerList());
+                    }
+                });
+    }
+
+    private void loadWeather() {
+        if (!isXunFrg) return;
+        RetrofitManager.getInstance(1).getWeatherObservable()
+                .compose(TransformUtils.<RspWeatherBean>defaultSchedulers())
+                .subscribe(new Subscriber<RspWeatherBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(RspWeatherBean rspBannerBean) {
+                        if (rspBannerBean.getHead().getRspCode().equals("0"))
+                            initWeatherData(rspBannerBean.getBody());
                     }
                 });
     }
@@ -295,9 +343,9 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        if (isXunFrg){
+        if (isXunFrg) {
             mNewsPresenter.refreshData();
-        }else {
+        } else {
             mBusinessPresenter.refreshData();
         }
 
@@ -307,9 +355,9 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (isXunFrg){
+        if (isXunFrg) {
             mNewsPresenter.onDestory();
-        }else {
+        } else {
             mBusinessPresenter.onDestory();
         }
 
@@ -317,9 +365,9 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
 
     @Override
     public void onLoadMoreRequested() {
-        if (isXunFrg){
+        if (isXunFrg) {
             mNewsPresenter.loadMore();
-        }else {
+        } else {
             mBusinessPresenter.loadMore();
         }
 
@@ -350,8 +398,8 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     private Intent setIntent(int position) {
         List<BaseNewBean> newsSummaryList = mNewsListAdapter.getData();
         Intent intent = new Intent(mActivity, NewDetailActivity.class);
-        intent.putExtra(Constants.NEWS_POST_ID, newsSummaryList.get(position).getId()+"");
-        intent.putExtra(Constants.NEWS_TYPE,isXunFrg?"1":"2");
+        intent.putExtra(Constants.NEWS_POST_ID, newsSummaryList.get(position).getId() + "");
+        intent.putExtra(Constants.NEWS_TYPE, isXunFrg ? "1" : "2");
         return intent;
     }
 
@@ -378,8 +426,8 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         }
         Intent intent = new Intent(mActivity, NewDetailActivity.class);
         intent.putExtra(Constants.NEWS_POST_ID, bundle.getString("id"));
-        intent.putExtra(Constants.NEWS_TYPE,"1");
-        startActivity(sliderLayout,intent);
+        intent.putExtra(Constants.NEWS_TYPE, "1");
+        startActivity(sliderLayout, intent);
 
     }
 
