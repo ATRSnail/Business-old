@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 
 import com.bus.business.R;
+import com.bus.business.common.UsrMgr;
 
 /**
  * @author xch
@@ -28,7 +29,7 @@ public class SplashActivity extends FragmentActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                cls = LoginActivity.class;
+                cls = UsrMgr.isLogin() ? MainActivity.class : LoginActivity.class;
                 startActivity(new Intent(SplashActivity.this, cls));
                 SplashActivity.this.finish();
             }

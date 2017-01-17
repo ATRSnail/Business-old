@@ -19,6 +19,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bus.business.App;
 import com.bus.business.R;
 import com.bus.business.common.ApiConstants;
 import com.bus.business.common.Constants;
@@ -38,6 +42,7 @@ import com.bus.business.mvp.ui.fragment.base.BaseLazyFragment;
 import com.bus.business.mvp.view.BusinessView;
 import com.bus.business.mvp.view.NewsView;
 import com.bus.business.repository.network.RetrofitManager;
+import com.bus.business.utils.DateUtil;
 import com.bus.business.utils.NetUtil;
 import com.bus.business.utils.TransformUtils;
 import com.bus.business.widget.RecyclerViewDivider;
@@ -90,6 +95,9 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     private TextView tv_carNoLimit;
     private TextView tv_pmten;
     private TextView tv_times;
+    private TextView tv_no_date;
+    private TextView tv_week;
+    private ImageView img_weather;
 
     private WeatherBean weatherBean;
     @Inject
@@ -155,6 +163,9 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         tv_carNoLimit = (TextView) weatherView.findViewById(R.id.tv_carNoLimit);
         tv_pmten = (TextView) weatherView.findViewById(R.id.tv_pmten);
         tv_times = (TextView) weatherView.findViewById(R.id.tv_times);
+        tv_no_date = (TextView) weatherView.findViewById(R.id.tv_no_date);
+        tv_week = (TextView) weatherView.findViewById(R.id.tv_week);
+        img_weather = (ImageView) weatherView.findViewById(R.id.img_weather);
     }
 
     @Override
@@ -244,10 +255,18 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     private void initWeatherData(WeathersBean weathersBean) {
         weatherBean = weathersBean.getWeather();
         tv_maxW.setText(weatherBean.getMaxW());
-        tv_dayTxt.setText(weatherBean.getDayTxt());
+        tv_dayTxt.setText(weatherBean.getDayTxt() + weatherBean.getMaxW() + "/" + weatherBean.getMinW() + "℃");
         tv_carNoLimit.setText(weathersBean.getCarNoLimit());
         tv_pmten.setText(weatherBean.getPmten());
         tv_times.setText(weatherBean.getTimes());
+        tv_no_date.setText(DateUtil.getLunarMonth()+DateUtil.getLunarDay());
+        tv_week.setText(DateUtil.getWeek());
+        Glide.with(App.getAppContext()).load(String.format(ApiConstants.NETEAST_IMG_HOST,weatherBean.getCode())).asBitmap() // gif格式有时会导致整体图片不显示，貌似有冲突
+                .format(DecodeFormat.PREFER_ARGB_8888)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.color.image_place_holder)
+                .error(R.drawable.ic_load_fail)
+                .into(img_weather);
     }
 
     private void loadBannerData() {

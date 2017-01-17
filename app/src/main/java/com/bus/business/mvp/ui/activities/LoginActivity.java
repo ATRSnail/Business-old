@@ -1,6 +1,7 @@
 package com.bus.business.mvp.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.socks.library.KLog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Subscriber;
 
 /**
@@ -32,6 +34,7 @@ public class LoginActivity extends BaseActivity {
     EditText passwordEt;
     private String phoneNum;
     private String password;
+    private SweetAlertDialog pDialog;
 
     @Override
     public int getLayoutId() {
@@ -40,13 +43,20 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initInjector() {
-
+        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
     }
 
     @Override
     public void initViews() {
         phoneEt.setText("18500241615");
         passwordEt.setText("admin");
+    }
+
+    private void initDialog(){
+
     }
 
     @OnClick(R.id.btnSure)
@@ -58,6 +68,7 @@ public class LoginActivity extends BaseActivity {
             UT.show("不能为空");
             return;
         }
+        pDialog.show();
         KLog.d("ddddd");
         RetrofitManager.getInstance(1).getLoginInObservable(phoneNum, password)
                 .compose(TransformUtils.<RspUserBean>defaultSchedulers())
@@ -65,6 +76,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         KLog.d();
+                        pDialog.dismiss();
                     }
 
                     @Override

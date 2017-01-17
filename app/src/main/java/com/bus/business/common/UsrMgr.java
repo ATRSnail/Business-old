@@ -34,6 +34,7 @@ public class UsrMgr {
 
     /**
      * 获取用户Id
+     *
      * @return
      */
     public static String getUseId() {
@@ -43,6 +44,7 @@ public class UsrMgr {
 
     /**
      * 获取用户电话
+     *
      * @return
      */
     public static String getUsePhone() {
@@ -57,6 +59,13 @@ public class UsrMgr {
      */
     public static void cacheUserInfo(String json) {
         SharedPrefsUtils.setStringPreference(context, USER_INFO, json);
+    }
+
+    /**
+     * 清除缓存数据
+     */
+    public static void clearUserInfo() {
+        cacheUserInfo("");
     }
 
     /**

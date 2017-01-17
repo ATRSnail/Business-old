@@ -23,6 +23,7 @@ import rx.Subscriber;
  * @create_date 16/12/24
  */
 public class MeetingsAdapter extends BaseQuickAdapter<MeetingBean> {
+    private String stateStr;
     public MeetingsAdapter(int layoutResId, List<MeetingBean> data) {
         super(layoutResId, data);
     }
@@ -34,7 +35,12 @@ public class MeetingsAdapter extends BaseQuickAdapter<MeetingBean> {
         baseViewHolder.setText(R.id.tv_date, DateUtil.getCurGroupDay(likeBean.getMeetingTime()));
 
         TextView addText = baseViewHolder.getView(R.id.img_add);
-        addText.setText(likeBean.getJoinType()?"已参会":"参会");
+        if (likeBean.getCheckType()){
+            stateStr = "已签到";
+        }else {
+            stateStr = likeBean.getJoinType()?"已参会":"参会";
+        }
+        addText.setText(stateStr);
         addText.setBackgroundResource(likeBean.getJoinType() ? R.drawable.grey_circle_5 : R.drawable.blue_circle_5);
         addText.setOnClickListener(new addClickListener(addText, likeBean));
     }

@@ -16,6 +16,7 @@ import com.bus.business.common.LoadNewsType;
 import com.bus.business.common.UsrMgr;
 import com.bus.business.mvp.entity.LikeBean;
 import com.bus.business.mvp.entity.MeetingBean;
+import com.bus.business.mvp.event.CheckMeetingStateEvent;
 import com.bus.business.mvp.event.JoinToMeetingEvent;
 import com.bus.business.mvp.presenter.impl.MeetingPresenterImpl;
 import com.bus.business.mvp.ui.adapter.MeetingsAdapter;
@@ -192,6 +193,12 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
         KLog.d("harvic", mNewsListAdapter.getData().get(event.getPos()).getJoinType());
         mNewsListAdapter.getData().get(event.getPos()).setJoinType(true);
         mNewsListAdapter.notifyDataSetChanged();
+    }
+
+    //扫描二维码签到之后刷新会议列表以改变状态
+    @Subscribe
+    public void onCheckMeetingToRefresh(CheckMeetingStateEvent event){
+        onRefresh();
     }
 
     @Override

@@ -18,7 +18,9 @@ import com.bus.business.R;
 import com.bus.business.common.NewsType;
 import com.bus.business.mvp.entity.response.base.BaseRspObj;
 import com.bus.business.mvp.event.ChangeSearchStateEvent;
+import com.bus.business.mvp.event.CheckMeetingStateEvent;
 import com.bus.business.mvp.ui.activities.base.BaseActivity;
+import com.bus.business.mvp.ui.fragment.ExpertFragment;
 import com.bus.business.mvp.ui.fragment.MainPagerFragment;
 import com.bus.business.mvp.ui.fragment.MeetingFragment;
 import com.bus.business.mvp.ui.fragment.MineFragment;
@@ -196,7 +198,7 @@ public class MainActivity extends BaseActivity {
             case 2:
                 return new WanFragment();
             case 3:
-                return new WanFragment();
+                return new ExpertFragment();
             case 4:
                 return new MineFragment();
             default:
@@ -209,7 +211,7 @@ public class MainActivity extends BaseActivity {
         homeFragmentIndex = event.getMsg();
         String msg = "onEventMainThread收到了消息：" + event.getMsg();
         KLog.d("harvic", msg);
-        UT.show(msg);
+    //    UT.show(msg);
     }
 
     @Override
@@ -247,6 +249,8 @@ public class MainActivity extends BaseActivity {
 
                    @Override
                    public void onNext(BaseRspObj baseRspObj) {
+                       if (baseRspObj.getHead().getRspCode().equals("0"))
+                         EventBus.getDefault().post(new CheckMeetingStateEvent());
                        UT.show(baseRspObj.getHead().getRspMsg());
                    }
                });

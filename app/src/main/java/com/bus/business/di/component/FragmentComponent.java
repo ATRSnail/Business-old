@@ -8,6 +8,7 @@ import com.bus.business.di.scope.ContextLife;
 import com.bus.business.di.scope.PerFragment;
 import com.bus.business.mvp.ui.fragment.MainPagerFragment;
 import com.bus.business.mvp.ui.fragment.MeetingFragment;
+import com.bus.business.mvp.ui.fragment.MineFragment;
 import com.bus.business.mvp.ui.fragment.NewsFragment;
 import com.bus.business.mvp.ui.fragment.WanFragment;
 
@@ -34,4 +35,6 @@ public interface FragmentComponent {
     void inject(MeetingFragment fragment);
 
     void inject(WanFragment wanFragment);
+
+    void inject(MineFragment mineFragment);
 }

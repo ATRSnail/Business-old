@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,45 +55,61 @@
             android:layout_marginTop="10dp"
             android:text="@string/account_manager" />
 
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.5dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:background="@mipmap/list_view_divider" />-->
+
+        <!--<TextView-->
+            <!--style="@style/mine_text"-->
+            <!--android:text="@string/assis_manager" />-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.5dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:background="@mipmap/list_view_divider" />-->
+
+        <!--<TextView-->
+            <!--style="@style/mine_text"-->
+            <!--android:text="@string/account_safe" />-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.5dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:background="@mipmap/list_view_divider" />-->
+
+        <!--<TextView-->
+            <!--style="@style/mine_text"-->
+            <!--android:text="@string/news_manager" />-->
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginLeft="15dp"
             android:background="@mipmap/list_view_divider" />
 
-        <TextView
-            style="@style/mine_text"
-            android:text="@string/assis_manager" />
-
-        <View
+        <RelativeLayout
+            android:id="@+id/rl_clear_cache"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:background="@mipmap/list_view_divider" />
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/mine_text"
+                android:text="@string/clear_cache" />
+            <TextView
+                android:id="@+id/tv_cache_size"
+                android:textSize="14sp"
+                android:textColor="@color/color_333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="50dp"
+                android:layout_centerVertical="true"
+                tools:text="20M"/>
+        </RelativeLayout>
 
-        <TextView
-            style="@style/mine_text"
-            android:text="@string/account_safe" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:background="@mipmap/list_view_divider" />
-
-        <TextView
-            style="@style/mine_text"
-            android:text="@string/news_manager" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:background="@mipmap/list_view_divider" />
-
-        <TextView
-            style="@style/mine_text"
-            android:text="@string/clear_cache" />
 
         <View
             android:layout_width="match_parent"
@@ -112,6 +129,7 @@
             android:background="@mipmap/list_view_divider" />
 
         <TextView
+            android:id="@+id/tv_logout"
             style="@style/mine_text"
             android:text="@string/quit_account" />
 

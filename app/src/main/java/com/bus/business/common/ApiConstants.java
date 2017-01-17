@@ -9,6 +9,7 @@ public class ApiConstants {
 
     //线下
     public static final String NETEAST_HOST = "http://172.16.10.15:9300/";
+    public static final String NETEAST_IMG_HOST = "http://files.heweather.com/cond_icon/%s.png";
 
     //线上
 //    public static final String NETEAST_HOST = "http://59.108.94.40:9100/";
@@ -24,7 +25,7 @@ public class ApiConstants {
     public static final String LOGIN_IN_URL = "/gsl-api/gsl/sysUser/login";
 
     public static final String BANNER_URL = "/gsl-api/gsl/news/newsBannerList";
-    public static final String WEATHER_URL = "/gsl-api/gsl/meeting/join";
+    public static final String WEATHER_URL = "/gsl-api/weather/getweather";
 
     public static final String NEW_DETAIL_URL = "/gsl-api/gsl/news/getNews";
 

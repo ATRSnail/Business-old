@@ -50,6 +50,7 @@ public class MeetingDetailActivity extends BaseActivity{
 
     private MeetingBean meetingBean;
     private int currentPos;
+    private String stateStr;
 
 
     @Override
@@ -70,7 +71,12 @@ public class MeetingDetailActivity extends BaseActivity{
         mProgressBar.setVisibility(View.GONE);
         setCustomTitle(meetingBean.getMeetingName());
         showOrGoneSearchRl(View.GONE);
-        mAddBtn.setText(meetingBean.getJoinType()?"已参会":"参会");
+        if (meetingBean.getCheckType()){
+            stateStr = "已签到";
+        }else {
+            stateStr = meetingBean.getJoinType()?"已参会":"参会";
+        }
+        mAddBtn.setText(stateStr);
         mTitle.setText(meetingBean.getMeetingName());
 
         mAddBtn.setBackgroundResource(meetingBean.getJoinType() ? R.drawable.grey_circle_5 : R.drawable.blue_circle_5);
