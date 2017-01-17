@@ -6,6 +6,7 @@ import android.content.Context;
 import com.bus.business.di.module.ActivityModule;
 import com.bus.business.di.scope.ContextLife;
 import com.bus.business.di.scope.PerActivity;
+import com.bus.business.mvp.ui.activities.ManagerActivity;
 import com.bus.business.mvp.ui.activities.MeetingDetailActivity;
 import com.bus.business.mvp.ui.activities.NewDetailActivity;
 import com.bus.business.mvp.ui.activities.PlaceActivity;
@@ -34,4 +35,6 @@ public interface ActivityComponent {
     void inject(PlaceActivity newsDetailActivity);
     void inject(SearchActivity newsDetailActivity);
     void inject(MeetingDetailActivity newsDetailActivity);
+
+    void inject(ManagerActivity managerActivity);
 }

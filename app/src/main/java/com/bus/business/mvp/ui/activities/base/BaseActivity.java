@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,6 +34,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends ActionBarAct
     RelativeLayout searchRl;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
+    @BindView(R.id.img_logo)
+    ImageView img_logo;
 
     protected ActivityComponent mActivityComponent;
 
@@ -82,6 +85,11 @@ public abstract class BaseActivity<T extends BasePresenter> extends ActionBarAct
     public void showOrGoneSearchRl(int vis) {
         if (searchRl != null)
         searchRl.setVisibility(vis);
+    }
+
+    public void showOrGoneLogo(int vis) {
+        if (img_logo != null)
+            img_logo.setVisibility(vis);
     }
 
     @Override

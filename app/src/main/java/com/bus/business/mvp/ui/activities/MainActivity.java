@@ -103,12 +103,13 @@ public class MainActivity extends BaseActivity {
 
     private void initData() {
         currIndex = 0;
-        fragmentTags = new ArrayList<>(Arrays.asList("HomeFragment", "ImFragment", "InterestFragment","FinancialFragment", "MemberFragment"));
+        fragmentTags = new ArrayList<>(Arrays.asList("HomeFragment", "ImFragment", "InterestFragment", "FinancialFragment", "MemberFragment"));
     }
 
     private void chageIndex(int index) {
         setCustomTitle(index == 0 || index == 1 ? "" : setTabSelection(index));
         showOrGoneSearchRl(index == 0 || index == 1 ? View.VISIBLE : View.GONE);
+        showOrGoneLogo(index == 2 ? View.VISIBLE : View.GONE);
 
         currIndex = index;
         showFragment();
@@ -128,15 +129,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case CAMERA_OK:
-                if (grantResults.length>0&&grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
-                    startActivityForResult(new Intent(MainActivity.this,CaptureActivity.class),0);
-                }else {
+                    startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 0);
+                } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
                     UT.show("请手动打开相机权限");
-                    }
+                }
                 break;
             default:
                 break;
@@ -144,14 +145,14 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.choice_qr_scan)
-    public void toCapture(View view){
+    public void toCapture(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             /**
              * 请求权限是一个异步任务  不是立即请求就能得到结果 在结果回调中返回
              */
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_OK);
-        }else {
-            startActivity(new Intent(MainActivity.this,CaptureActivity.class));
+        } else {
+            startActivity(new Intent(MainActivity.this, CaptureActivity.class));
         }
 
     }
@@ -211,7 +212,7 @@ public class MainActivity extends BaseActivity {
         homeFragmentIndex = event.getMsg();
         String msg = "onEventMainThread收到了消息：" + event.getMsg();
         KLog.d("harvic", msg);
-    //    UT.show(msg);
+        //    UT.show(msg);
     }
 
     @Override
@@ -233,28 +234,28 @@ public class MainActivity extends BaseActivity {
 
     }
 
-   private void signInMeeting(String meetingId){
-       RetrofitManager.getInstance(1).signInMeeting(meetingId)
-               .compose(TransformUtils.<BaseRspObj>defaultSchedulers())
-               .subscribe(new Subscriber<BaseRspObj>() {
-                   @Override
-                   public void onCompleted() {
+    private void signInMeeting(String meetingId) {
+        RetrofitManager.getInstance(1).signInMeeting(meetingId)
+                .compose(TransformUtils.<BaseRspObj>defaultSchedulers())
+                .subscribe(new Subscriber<BaseRspObj>() {
+                    @Override
+                    public void onCompleted() {
 
-                   }
+                    }
 
-                   @Override
-                   public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-                   }
+                    }
 
-                   @Override
-                   public void onNext(BaseRspObj baseRspObj) {
-                       if (baseRspObj.getHead().getRspCode().equals("0"))
-                         EventBus.getDefault().post(new CheckMeetingStateEvent());
-                       UT.show(baseRspObj.getHead().getRspMsg());
-                   }
-               });
-   }
+                    @Override
+                    public void onNext(BaseRspObj baseRspObj) {
+                        if (baseRspObj.getHead().getRspCode().equals("0"))
+                            EventBus.getDefault().post(new CheckMeetingStateEvent());
+                        UT.show(baseRspObj.getHead().getRspMsg());
+                    }
+                });
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

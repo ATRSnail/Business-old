@@ -37,8 +37,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        tools:replace="icon"
-        android:theme="@style/BaseAppTheme">
+        android:theme="@style/BaseAppTheme"
+        tools:replace="icon">
         <activity
             android:name=".mvp.ui.activities.SplashActivity"
             android:label="@string/app_name"
@@ -156,7 +156,8 @@
             android:value="${JPUSH_APPKEY}" />
 
         <activity android:name=".mvp.ui.activities.WebActivity" />
-        <activity android:name=".mvp.ui.activities.AboutActivity"></activity>
+        <activity android:name=".mvp.ui.activities.AboutActivity" />
+        <activity android:name=".mvp.ui.activities.ManagerActivity"></activity>
     </application>
 
 </manifest>

@@ -1,12 +1,21 @@
 package com.bus.business.mvp.entity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.bus.business.mvp.ui.activities.ManagerActivity;
+
+import java.io.Serializable;
+
 /**
  * @author xch
  * @version 1.0
  * @create_date 16/12/28
  */
-public class UserBean {
+public class UserBean implements Serializable{
 
+    public static final String USER_BEAN = "user_bean";
     /**
      * phoneNo : 15101659241
      * niceName : wo
@@ -32,6 +41,14 @@ public class UserBean {
     private String userEmail;
     private long ctime;
     private String phoneModel;
+
+    public void intentToClass(Context context){
+        Intent intent = new Intent(context,ManagerActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER_BEAN,this);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
 
     public String getPhoneNo() {
         return phoneNo;

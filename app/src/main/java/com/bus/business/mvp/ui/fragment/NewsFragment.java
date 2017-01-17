@@ -52,7 +52,9 @@ import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.socks.library.KLog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -256,17 +258,27 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         weatherBean = weathersBean.getWeather();
         tv_maxW.setText(weatherBean.getMaxW());
         tv_dayTxt.setText(weatherBean.getDayTxt() + weatherBean.getMaxW() + "/" + weatherBean.getMinW() + "℃");
-        tv_carNoLimit.setText(weathersBean.getCarNoLimit());
+
+        String singleStr = weatherBean.getType() ? judgeSingle() ? "单号" : "双号" : weathersBean.getCarNoLimit();
+
+        tv_carNoLimit.setText(singleStr);
         tv_pmten.setText(weatherBean.getPmten());
         tv_times.setText(weatherBean.getTimes());
-        tv_no_date.setText(DateUtil.getLunarMonth()+DateUtil.getLunarDay());
+        tv_no_date.setText(DateUtil.getLunarMonth() + DateUtil.getLunarDay());
         tv_week.setText(DateUtil.getWeek());
-        Glide.with(App.getAppContext()).load(String.format(ApiConstants.NETEAST_IMG_HOST,weatherBean.getCode())).asBitmap() // gif格式有时会导致整体图片不显示，貌似有冲突
+        Glide.with(App.getAppContext()).load(String.format(ApiConstants.NETEAST_IMG_HOST, weatherBean.getCode())).asBitmap() // gif格式有时会导致整体图片不显示，貌似有冲突
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.color.image_place_holder)
                 .error(R.drawable.ic_load_fail)
                 .into(img_weather);
+    }
+
+    private boolean judgeSingle() {
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("dd");
+        String date = sDateFormat.format(new java.util.Date());
+        KLog.a("date--->" + date);
+        return (Integer.parseInt(date) % 2) == 1;
     }
 
     private void loadBannerData() {

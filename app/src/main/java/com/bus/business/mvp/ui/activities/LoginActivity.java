@@ -55,7 +55,7 @@ public class LoginActivity extends BaseActivity {
         passwordEt.setText("admin");
     }
 
-    private void initDialog(){
+    private void initDialog() {
 
     }
 
@@ -82,18 +82,22 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         KLog.e(e.toString());
-                        UT.show("密码错误");
                         pDialog.dismiss();
                     }
 
                     @Override
                     public void onNext(RspUserBean rspUserBean) {
                         pDialog.dismiss();
-                        KLog.a("user--->"+rspUserBean.toString());
-                        UsrMgr.cacheUserInfo(new Gson().toJson(rspUserBean.getBody().getUser()));
-                        KLog.a("userInfo--->"+UsrMgr.getUseInfo().toString());
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        LoginActivity.this.finish();
+                        KLog.a("user--->" + rspUserBean.toString());
+                        UT.show(rspUserBean.getHead().getRspMsg());
+                        if (rspUserBean.getHead().getRspCode().equals("0")) {
+                            UsrMgr.cacheUserInfo(new Gson().toJson(rspUserBean.getBody().getUser()));
+                            KLog.a("userInfo--->" + UsrMgr.getUseInfo().toString());
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            LoginActivity.this.finish();
+
+                        }
+
                     }
                 });
 

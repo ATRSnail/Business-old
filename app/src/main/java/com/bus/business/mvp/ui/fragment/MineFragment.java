@@ -11,7 +11,6 @@ import com.bus.business.common.UsrMgr;
 import com.bus.business.mvp.entity.UserBean;
 import com.bus.business.mvp.ui.activities.AboutActivity;
 import com.bus.business.mvp.ui.activities.LoginActivity;
-import com.bus.business.mvp.ui.activities.RetPasswordActivity;
 import com.bus.business.mvp.ui.fragment.base.BaseFragment;
 import com.bus.business.utils.FileUtil;
 import com.bus.business.utils.MethodsCompat;
@@ -69,7 +68,7 @@ public class MineFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_account_manager:
-                startActivity(new Intent(getActivity(), RetPasswordActivity.class));
+                userBean.intentToClass(mActivity);
                 break;
             case R.id.about_us:
                 startActivity(new Intent(getActivity(), AboutActivity.class));

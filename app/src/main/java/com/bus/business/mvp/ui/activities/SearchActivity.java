@@ -27,6 +27,7 @@ import com.bus.business.common.LoadNewsType;
 import com.bus.business.common.NewsType;
 import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.entity.response.base.BaseNewBean;
+import com.bus.business.mvp.event.JoinToMeetingEvent;
 import com.bus.business.mvp.presenter.impl.BusinessPresenterImpl;
 import com.bus.business.mvp.presenter.impl.MeetingPresenterImpl;
 import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
@@ -38,6 +39,9 @@ import com.bus.business.mvp.view.MeetingView;
 import com.bus.business.mvp.view.NewsView;
 import com.bus.business.utils.NetUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +55,9 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
         , NewsView<List<BaseNewBean>>
         , MeetingView
         , BusinessView
-        ,BaseQuickAdapter.RequestLoadMoreListener
+        , BaseQuickAdapter.RequestLoadMoreListener
         , BaseQuickAdapter.OnRecyclerViewItemClickListener
-        ,TextView.OnEditorActionListener{
+        , TextView.OnEditorActionListener{
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -92,6 +96,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     @Override
     public void initViews() {
+        EventBus.getDefault().register(this);
         setCustomTitle("搜索");
         showOrGoneSearchRl(View.GONE);
         searchIndex = getIntent().getIntExtra(NewsType.TYPE_SEARCH, 1);
@@ -104,13 +109,13 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
         this.hideProgress();
         switch (searchIndex) {
             case NewsType.TYPE_REFRESH_XUNXI:
-                mSearchEdit.setHint("搜索讯息");
+                mSearchEdit.setHint("搜索你所需要的-新闻信息");
                 break;
             case NewsType.TYPE_REFRESH_XIEHUI:
-                mSearchEdit.setHint("搜索协会");
+                mSearchEdit.setHint("搜索你所需要的-商业信息");
                 break;
             case NewsType.TYPE_REFRESH_HUIWU:
-                mSearchEdit.setHint("搜索会务");
+                mSearchEdit.setHint("搜索你所需要的-会议信息");
                 break;
         }
         mSearchEdit.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -243,6 +248,9 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
             case NewsType.TYPE_REFRESH_XIEHUI:
                 goToNewsDetailActivity(view,i);
                 break;
+            case NewsType.TYPE_REFRESH_HUIWU:
+                ((MeetingBean)mNewsListAdapter.getData().get(i)).intentToDetail(mActivity,i);
+                break;
         }
     }
 
@@ -357,5 +365,17 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
         }
         return false;
 
+    }
+
+    @Subscribe
+    public void onEventMainThread(JoinToMeetingEvent event) {
+        ((MeetingBean)mNewsListAdapter.getData().get(event.getPos())).setJoinType(true);
+        mNewsListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

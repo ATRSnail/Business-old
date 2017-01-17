@@ -1,5 +1,7 @@
 package com.bus.business.mvp.entity;
 
+import android.text.TextUtils;
+
 /**
  * @author xch
  * @version 1.0
@@ -45,6 +47,7 @@ public class WeatherBean {
     private int id;
     private String pmten;
     private String status;
+    private String type;
 
     public String getMaxW() {
         return maxW;
@@ -182,6 +185,14 @@ public class WeatherBean {
         this.status = status;
     }
 
+    public boolean getType() {
+        return TextUtils.isEmpty(type) || type.equals(2);
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "WeatherBean{" +
@@ -202,6 +213,7 @@ public class WeatherBean {
                 ", id=" + id +
                 ", pmten='" + pmten + '\'' +
                 ", status='" + status + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }

@@ -14,7 +14,6 @@ import com.bus.business.R;
 import com.bus.business.common.Constants;
 import com.bus.business.common.LoadNewsType;
 import com.bus.business.common.UsrMgr;
-import com.bus.business.mvp.entity.LikeBean;
 import com.bus.business.mvp.entity.MeetingBean;
 import com.bus.business.mvp.event.CheckMeetingStateEvent;
 import com.bus.business.mvp.event.JoinToMeetingEvent;
@@ -146,17 +145,6 @@ public class MeetingFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onLoadMoreRequested() {
         mNewsPresenter.loadMore();
-    }
-
-    private void checkIsEmpty(List<LikeBean> newsSummary) {
-        if (newsSummary == null && mNewsListAdapter.getData() == null) {
-            mNewsRV.setVisibility(View.GONE);
-            mEmptyView.setVisibility(View.VISIBLE);
-
-        } else {
-            mNewsRV.setVisibility(View.VISIBLE);
-            mEmptyView.setVisibility(View.GONE);
-        }
     }
 
     @Override
