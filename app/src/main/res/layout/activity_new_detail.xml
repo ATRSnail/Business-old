@@ -37,31 +37,64 @@
                 android:textStyle="bold"
                 tools:text="项目总投资5亿" />
 
-            <TextView
-                android:id="@+id/news_detail_from_tv"
+            <LinearLayout
+                android:id="@+id/ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/news_detail_fund_tv"
-                android:layout_marginTop="15dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text_size_14"
-                tools:text="澎湃新闻 06-06 17:24" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/news_detail_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/text_size_14"
+                    tools:text="发表时间： 06-06 17:24" />
+
+                <TextView
+                    android:id="@+id/news_detail_from_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/text_size_14"
+                    tools:text="澎湃新闻 06-06 17:24" />
+            </LinearLayout>
+
 
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@+id/news_detail_from_tv"
+                android:layout_below="@+id/ll"
                 android:layout_marginTop="15dp"
                 android:background="@color/color_999999" />
+
+            <TextView
+                android:id="@+id/tv_tag"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="项目概述"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/view"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="8dp"
+                android:drawableLeft="@mipmap/img_line"
+                android:background="@color/white"
+                android:textSize="18sp"
+                android:paddingLeft="20dp"
+                android:textColor="@color/text_color_black"/>
 
             <TextView
                 android:id="@+id/news_detail_body_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/view"
-                android:layout_marginTop="15dp"
+                android:layout_below="@id/tv_tag"
+                android:layout_marginTop="6dp"
                 android:lineSpacingExtra="6dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/primary_text"
@@ -90,7 +123,17 @@
                 android:text="参会"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/news_detail_body_tv"
+                android:layout_marginTop="@dimen/space_15"
+                tools:text="联系电话:"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp" />
         </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>

@@ -82,10 +82,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         KLog.e(e.toString());
+                        UT.show("密码错误");
+                        pDialog.dismiss();
                     }
 
                     @Override
                     public void onNext(RspUserBean rspUserBean) {
+                        pDialog.dismiss();
                         KLog.a("user--->"+rspUserBean.toString());
                         UsrMgr.cacheUserInfo(new Gson().toJson(rspUserBean.getBody().getUser()));
                         KLog.a("userInfo--->"+UsrMgr.getUseInfo().toString());

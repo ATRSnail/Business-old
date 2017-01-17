@@ -160,7 +160,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
             case NewsType.TYPE_REFRESH_XUNXI:
             case NewsType.TYPE_REFRESH_XIEHUI:
                 likeBeanList = new ArrayList<>();
-                mNewsListAdapter = new NewsAdapter(R.layout.layout_new_item, likeBeanList);
+                mNewsListAdapter = new NewsAdapter(R.layout.item_news, likeBeanList);
                 break;
             case NewsType.TYPE_REFRESH_HUIWU:
                 meetList = new ArrayList<>();
@@ -323,7 +323,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
     }
 
     private void startActivity(View view, Intent intent) {
-        ImageView newsSummaryPhotoIv = (ImageView) view.findViewById(R.id.item_img_bg);
+        ImageView newsSummaryPhotoIv = (ImageView) view.findViewById(R.id.daimajia_slider_image);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation(mActivity, newsSummaryPhotoIv, Constants.TRANSITION_ANIMATION_NEWS_PHOTOS);

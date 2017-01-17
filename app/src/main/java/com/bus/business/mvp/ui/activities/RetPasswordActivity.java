@@ -47,12 +47,16 @@ public class RetPasswordActivity extends BaseActivity {
 
     @OnClick(R.id.btnSure)
     public void savePassword(View view){
-        oldPassword = oldEdittext.getText().toString();
-        newPassword = newEdittext.getText().toString();
-        newPasswordTwo = newEdittextTwo.getText().toString();
+        oldPassword = oldEdittext.getText().toString().trim();
+        newPassword = newEdittext.getText().toString().trim();
+        newPasswordTwo = newEdittextTwo.getText().toString().trim();
 
         if (TextUtils.isEmpty(oldPassword)||TextUtils.isEmpty(newPassword)||TextUtils.isEmpty(newPasswordTwo)){
             UT.show("不能为空");
+            return;
+        }
+        if (!newPassword.equals(newPasswordTwo)){
+            UT.show("两次输入不一致");
             return;
         }
 
@@ -66,15 +70,15 @@ public class RetPasswordActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                         UT.show("原密码错误");
                     }
 
                     @Override
                     public void onNext(BaseRspObj baseRspObj) {
                       if (baseRspObj.getHead().getRspCode().equals("0")){
-                          UT.show("修改成功");
                           RetPasswordActivity.this.finish();
                       }
+                        UT.show(baseRspObj.getHead().getRspMsg());
                     }
                 });
 

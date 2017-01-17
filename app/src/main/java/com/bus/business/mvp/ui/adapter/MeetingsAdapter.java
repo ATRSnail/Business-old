@@ -31,7 +31,7 @@ public class MeetingsAdapter extends BaseQuickAdapter<MeetingBean> {
     @Override
     protected void convert(BaseViewHolder baseViewHolder, MeetingBean likeBean) {
         baseViewHolder.setText(R.id.tv_name, likeBean.getMeetingName());
-        baseViewHolder.setText(R.id.tv_address, likeBean.getMeetingLoc());
+        baseViewHolder.setText(R.id.tv_address, "北京工商联");
         baseViewHolder.setText(R.id.tv_date, DateUtil.getCurGroupDay(likeBean.getMeetingTime()));
 
         TextView addText = baseViewHolder.getView(R.id.img_add);

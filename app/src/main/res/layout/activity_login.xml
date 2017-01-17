@@ -82,6 +82,7 @@
                     android:hint="密码"
                     android:paddingLeft="15.0dip"
                     android:singleLine="true"
+                    android:inputType="textPassword"
                     android:textColor="#ff111111"
                     android:textColorHint="#ffaaaaaa"
                     android:textSize="16.0sp" />

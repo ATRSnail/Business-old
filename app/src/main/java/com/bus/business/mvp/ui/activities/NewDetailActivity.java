@@ -3,6 +3,7 @@ package com.bus.business.mvp.ui.activities;
 import android.app.Activity;
 import android.text.Html;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ import com.bus.business.utils.DateUtil;
 import com.bus.business.utils.TransformUtils;
 import com.bus.business.widget.URLImageGetter;
 import com.socks.library.KLog;
+
+import java.text.DecimalFormat;
 
 import javax.inject.Inject;
 
@@ -39,6 +42,14 @@ public class NewDetailActivity extends BaseActivity {
     TextView mNewsDetailBodyTv;
     @BindView(R.id.news_detail_fund_tv)
     TextView mFundTv;
+    @BindView(R.id.news_detail_date_tv)
+    TextView mDateTv;
+    @BindView(R.id.tv_phone)
+    TextView mPhone;
+    @BindView(R.id.tv_tag)
+    TextView mTag;
+    @BindView(R.id.ll)
+    LinearLayout ll;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
@@ -59,14 +70,16 @@ public class NewDetailActivity extends BaseActivity {
         newsId = getIntent().getStringExtra(Constants.NEWS_POST_ID);
         newsType = getIntent().getStringExtra(Constants.NEWS_TYPE);
 
-        setCustomTitle(newsType.equals("1")?"新闻详情":"商讯详情");
+        setCustomTitle(newsType.equals("1") ? "新闻详情" : "商讯详情");
         showOrGoneSearchRl(View.GONE);
-        mFundTv.setVisibility(newsType.equals("1")?View.GONE:View.VISIBLE);
+        mFundTv.setVisibility(newsType.equals("1") ? View.GONE : View.VISIBLE);
+        mPhone.setVisibility(newsType.equals("1") ? View.GONE : View.VISIBLE);
+        mTag.setVisibility(newsType.equals("1") ? View.GONE : View.VISIBLE);
         loadNewDetail();
     }
 
-    private void loadNewDetail(){
-        if (newsType.equals("1")){
+    private void loadNewDetail() {
+        if (newsType.equals("1")) {
             RetrofitManager.getInstance(1).getNewDetailObservable(newsId)
                     .compose(TransformUtils.<RspNewDetailBean>defaultSchedulers())
                     .subscribe(new Subscriber<RspNewDetailBean>() {
@@ -87,8 +100,7 @@ public class NewDetailActivity extends BaseActivity {
                             fillData(rspNewDetailBean.getBody().getNews());
                         }
                     });
-        }
-        else {
+        } else {
             RetrofitManager.getInstance(1).getBusDetailObservable(newsId)
                     .compose(TransformUtils.<RspBusDetailBean>defaultSchedulers())
                     .subscribe(new Subscriber<RspBusDetailBean>() {
@@ -112,11 +124,19 @@ public class NewDetailActivity extends BaseActivity {
         }
     }
 
-    private void fillData(BusDetailBean bean){
+    private void fillData(BusDetailBean bean) {
         mTitle.setText(bean.getTitle());
-        mFrom.setText("工商联  "+ DateUtil.getCurGroupDay(bean.getUtime()));
-        mFundTv.setText("项目总投资"+bean.getInAmount()+"亿元");
+        mDateTv.setText("发表时间 : " + DateUtil.getCurGroupDay(bean.getCtime()));
+        mFrom.setText("北京工商联");
+        mFundTv.setText("项目总投资" + formAmount(bean.getInAmount()) + "元");
+        mPhone.setText("联系电话 : " + bean.getPhoneNo());
         mUrlImageGetter = new URLImageGetter(mNewsDetailBodyTv, bean.getContentS(), 2);
-        mNewsDetailBodyTv.setText(Html.fromHtml(bean.getContentS(),mUrlImageGetter,null));
+        mNewsDetailBodyTv.setText(Html.fromHtml(bean.getContentS(), mUrlImageGetter, null));
+    }
+
+    private String formAmount(int num) {
+        DecimalFormat myformat = new DecimalFormat();
+        myformat.applyPattern("##,###");
+        return myformat.format(num);
     }
 }
