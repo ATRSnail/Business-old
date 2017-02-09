@@ -1,7 +1,7 @@
 package com.bus.business.mvp.ui.activities.base;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,7 +26,7 @@ import rx.Subscription;
  * @version 1.0
  * @create_date 16/12/22
  */
-public abstract class BaseActivity<T extends BasePresenter> extends ActionBarActivity {
+public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;

@@ -20,6 +20,8 @@ public class ApiConstants {
 
     public static final String NEWS_URL = "/gsl-api/gsl/news/newsList";
 
+    public static final String TOPICS_URL = "/gsl-api/gsl/dissertation/disList";
+
     public static final String MEETINGS_URL = "/gsl-api/gsl/meeting/meetingList";
 
     public static final String LOGIN_IN_URL = "/gsl-api/gsl/sysUser/login";
@@ -28,6 +30,8 @@ public class ApiConstants {
     public static final String WEATHER_URL = "/gsl-api/weather/getweather";
 
     public static final String NEW_DETAIL_URL = "/gsl-api/gsl/news/getNews";
+
+    public static final String TOPIC_DETAIL_URL = "/gsl-api/gsl/dissertation/getdissertation";
 
     public static final String BUS_DETAIL_URL = "/gsl-api/gsl/business/getBusiness";
 

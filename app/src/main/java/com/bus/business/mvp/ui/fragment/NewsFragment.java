@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -37,6 +38,7 @@ import com.bus.business.mvp.entity.response.base.BaseNewBean;
 import com.bus.business.mvp.presenter.impl.BusinessPresenterImpl;
 import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
 import com.bus.business.mvp.ui.activities.NewDetailActivity;
+import com.bus.business.mvp.ui.activities.TopicListActivity;
 import com.bus.business.mvp.ui.adapter.NewsAdapter;
 import com.bus.business.mvp.ui.fragment.base.BaseLazyFragment;
 import com.bus.business.mvp.view.BusinessView;
@@ -249,6 +251,8 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
             //add your extra information
             Bundle bundle = new Bundle();
             bundle.putString("id", pageIconBean.getId() + "");
+            bundle.putString("img_url", pageIconBean.getFmImg());
+            bundle.putBoolean("isTopci", (!TextUtils.isEmpty(pageIconBean.getTypes())) && pageIconBean.getTypes().equals("3"));
             textSliderView.bundle(bundle);
             sliderLayout.addSlider(textSliderView);
         }
@@ -375,7 +379,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         if (isXunFrg) {
-            mNewsPresenter.refreshData();
+           mNewsPresenter.refreshData();
         } else {
             mBusinessPresenter.refreshData();
         }
@@ -430,7 +434,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         List<BaseNewBean> newsSummaryList = mNewsListAdapter.getData();
         Intent intent = new Intent(mActivity, NewDetailActivity.class);
         intent.putExtra(Constants.NEWS_POST_ID, newsSummaryList.get(position).getId() + "");
-        intent.putExtra(Constants.NEWS_TYPE, isXunFrg ? "1" : "2");
+        intent.putExtra(Constants.NEWS_TYPE, isXunFrg ? Constants.DETAIL_XUN_TYPE : Constants.DETAIL_XIE_TYPE);
         return intent;
     }
 
@@ -455,9 +459,11 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         if (bundle == null) {
             return;
         }
-        Intent intent = new Intent(mActivity, NewDetailActivity.class);
+        Boolean isTopic = bundle.getBoolean("isTopci");
+        Intent intent = new Intent(mActivity, isTopic ? TopicListActivity.class : NewDetailActivity.class);
         intent.putExtra(Constants.NEWS_POST_ID, bundle.getString("id"));
-        intent.putExtra(Constants.NEWS_TYPE, "1");
+        intent.putExtra(Constants.NEWS_IMG,bundle.getString("img_url"));
+        intent.putExtra(Constants.NEWS_TYPE, Constants.DETAIL_XUN_TYPE);
         startActivity(sliderLayout, intent);
 
     }

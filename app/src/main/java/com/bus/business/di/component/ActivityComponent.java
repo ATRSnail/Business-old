@@ -11,6 +11,7 @@ import com.bus.business.mvp.ui.activities.MeetingDetailActivity;
 import com.bus.business.mvp.ui.activities.NewDetailActivity;
 import com.bus.business.mvp.ui.activities.PlaceActivity;
 import com.bus.business.mvp.ui.activities.SearchActivity;
+import com.bus.business.mvp.ui.activities.TopicListActivity;
 
 import dagger.Component;
 
@@ -37,4 +38,6 @@ public interface ActivityComponent {
     void inject(MeetingDetailActivity newsDetailActivity);
 
     void inject(ManagerActivity managerActivity);
+
+    void inject(TopicListActivity topicListActivity);
 }

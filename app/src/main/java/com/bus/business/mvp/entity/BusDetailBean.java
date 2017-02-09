@@ -10,7 +10,7 @@ public class BusDetailBean {
     private String phoneNo;
     private int id;
     private String title;
-    private int inAmount;
+    private double inAmount;
     private String plane;
     private String status;
     private String contactsS;
@@ -63,7 +63,7 @@ public class BusDetailBean {
         this.title = title;
     }
 
-    public int getInAmount() {
+    public double getInAmount() {
         return inAmount;
     }
 

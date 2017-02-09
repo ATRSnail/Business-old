@@ -12,6 +12,7 @@ import com.bus.business.mvp.entity.response.RspBusinessBean;
 import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
+import com.bus.business.mvp.entity.response.RspTopicsBean;
 import com.bus.business.mvp.entity.response.RspUserBean;
 import com.bus.business.mvp.entity.response.RspWeatherBean;
 import com.bus.business.mvp.entity.response.base.BaseRspObj;
@@ -145,6 +146,15 @@ public class RetrofitManager {
         return mNewsService.getNewsList(map);
     }
 
+    public Observable<RspTopicsBean> getTopicListObservable(int pageNum, int numPerPage, String newsId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("pageNum", pageNum + "");
+        map.put("numPerPage", numPerPage + "");
+            map.put("newsId", newsId);
+        KLog.a(map.toString());
+        return mNewsService.getTopicsList(map);
+    }
+
     public Observable<RspMeetingBean> getMeetingsListObservable(int pageNum, int numPerPage, String meetingName) {
         Map<String, String> map = new HashMap<>();
         map.put("pageNum", pageNum + "");
@@ -178,6 +188,13 @@ public class RetrofitManager {
         map.put("newsId", newsId);
         KLog.a(map.toString());
         return mNewsService.getNewDetail(map);
+    }
+
+    public Observable<RspNewDetailBean> getTopicDetailObservable(String newsId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("dissId", newsId);
+        KLog.a(map.toString());
+        return mNewsService.getTopicDetail(map);
     }
 
     public Observable<RspBusDetailBean> getBusDetailObservable(String newsId) {

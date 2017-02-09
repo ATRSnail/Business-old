@@ -157,7 +157,8 @@
 
         <activity android:name=".mvp.ui.activities.WebActivity" />
         <activity android:name=".mvp.ui.activities.AboutActivity" />
-        <activity android:name=".mvp.ui.activities.ManagerActivity"></activity>
+        <activity android:name=".mvp.ui.activities.ManagerActivity" />
+        <activity android:name=".mvp.ui.activities.TopicListActivity"></activity>
     </application>
 
 </manifest>

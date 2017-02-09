@@ -7,6 +7,7 @@ import com.bus.business.mvp.entity.response.RspBusinessBean;
 import com.bus.business.mvp.entity.response.RspMeetingBean;
 import com.bus.business.mvp.entity.response.RspNewDetailBean;
 import com.bus.business.mvp.entity.response.RspNewsBean;
+import com.bus.business.mvp.entity.response.RspTopicsBean;
 import com.bus.business.mvp.entity.response.RspUserBean;
 import com.bus.business.mvp.entity.response.RspWeatherBean;
 import com.bus.business.mvp.entity.response.base.BaseRspObj;
@@ -33,6 +34,10 @@ public interface NewsService {
     Observable<RspNewsBean> getNewsList(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
+    @POST(ApiConstants.TOPICS_URL)
+    Observable<RspTopicsBean> getTopicsList(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
     @POST(ApiConstants.BUSINESS_LIST_URL)
     Observable<RspBusinessBean> getBusinessList(@FieldMap Map<String, String> map);
 
@@ -47,6 +52,10 @@ public interface NewsService {
     @FormUrlEncoded
     @POST(ApiConstants.NEW_DETAIL_URL)
     Observable<RspNewDetailBean> getNewDetail(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.TOPIC_DETAIL_URL)
+    Observable<RspNewDetailBean> getTopicDetail(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST(ApiConstants.BUS_DETAIL_URL)
