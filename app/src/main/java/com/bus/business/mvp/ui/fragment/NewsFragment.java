@@ -37,6 +37,7 @@ import com.bus.business.mvp.entity.response.RspWeatherBean;
 import com.bus.business.mvp.entity.response.base.BaseNewBean;
 import com.bus.business.mvp.presenter.impl.BusinessPresenterImpl;
 import com.bus.business.mvp.presenter.impl.NewsPresenterImpl;
+import com.bus.business.mvp.ui.activities.ExamsActivity;
 import com.bus.business.mvp.ui.activities.NewDetailActivity;
 import com.bus.business.mvp.ui.activities.TopicListActivity;
 import com.bus.business.mvp.ui.adapter.NewsAdapter;
@@ -66,6 +67,7 @@ import butterknife.BindView;
 import rx.Subscriber;
 
 import static android.view.View.VISIBLE;
+import static com.bus.business.mvp.entity.WanBean.WEBURL;
 
 /**
  * @author xch
@@ -102,6 +104,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     private TextView tv_no_date;
     private TextView tv_week;
     private ImageView img_weather;
+    private ImageView mImgAct;
 
     private WeatherBean weatherBean;
     @Inject
@@ -159,6 +162,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         if (!isXunFrg) return;
         weatherView = View.inflate(mActivity, R.layout.layout_weather, null);
         mTitleHeader = View.inflate(mActivity, R.layout.layout_head_text, null);
+        mImgAct = (ImageView) mTitleHeader.findViewById(R.id.img_act);
         mSlideHeader = View.inflate(mActivity, R.layout.layout_autoloop_viewpage, null);
         sliderLayout = (SliderLayout) mSlideHeader.findViewById(R.id.slider);
         pagerIndicator = (PagerIndicator) mSlideHeader.findViewById(R.id.custom_indicator);
@@ -170,6 +174,13 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         tv_no_date = (TextView) weatherView.findViewById(R.id.tv_no_date);
         tv_week = (TextView) weatherView.findViewById(R.id.tv_week);
         img_weather = (ImageView) weatherView.findViewById(R.id.img_weather);
+        mImgAct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, ExamsActivity.class);
+                mActivity.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -345,10 +356,15 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
                 checkIsEmpty(newsBean);
                 break;
             case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
-                if (newsBean == null || newsBean.size() == 0) {
-                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
-                } else {
+
+                if (newsBean == null){
+                    return;
+                }
+                if (newsBean.size() == Constants.numPerPage){
                     mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, false);
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             case LoadNewsType.TYPE_LOAD_MORE_ERROR:
@@ -379,7 +395,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         if (isXunFrg) {
-           mNewsPresenter.refreshData();
+            mNewsPresenter.refreshData();
         } else {
             mBusinessPresenter.refreshData();
         }
@@ -462,7 +478,7 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
         Boolean isTopic = bundle.getBoolean("isTopci");
         Intent intent = new Intent(mActivity, isTopic ? TopicListActivity.class : NewDetailActivity.class);
         intent.putExtra(Constants.NEWS_POST_ID, bundle.getString("id"));
-        intent.putExtra(Constants.NEWS_IMG,bundle.getString("img_url"));
+        intent.putExtra(Constants.NEWS_IMG, bundle.getString("img_url"));
         intent.putExtra(Constants.NEWS_TYPE, Constants.DETAIL_XUN_TYPE);
         startActivity(sliderLayout, intent);
 
@@ -481,10 +497,14 @@ public class NewsFragment extends BaseLazyFragment implements SwipeRefreshLayout
                 checkIsEmpty(newsBean);
                 break;
             case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
-                if (newsBean == null || newsBean.size() == 0) {
-                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
-                } else {
+                if (newsBean == null){
+                    return;
+                }
+                if (newsBean.size() == Constants.numPerPage){
                     mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }else {
+                    mNewsListAdapter.notifyDataChangedAfterLoadMore(newsBean, false);
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             case LoadNewsType.TYPE_LOAD_MORE_ERROR:

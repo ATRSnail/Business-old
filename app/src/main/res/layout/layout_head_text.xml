@@ -12,7 +12,7 @@
         android:layout_marginTop="6dp"
         android:scaleType="fitXY"
         android:visibility="gone"
-        android:src="@mipmap/ic_news_empty" />
+        android:src="@mipmap/banner_research" />
 
     <ImageView
         android:id="@+id/img_act"
@@ -24,6 +24,7 @@
         android:src="@mipmap/img_reaserch" />
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"

@@ -7,7 +7,7 @@ package com.bus.business.common;
  */
 public class Constants {
 
-    public static final int numPerPage = 20;
+    public static final int numPerPage = 6;
 
     public static final String NEWS_POST_ID = "news_post_id";
     public static final String NEWS_IMG = "news_img";

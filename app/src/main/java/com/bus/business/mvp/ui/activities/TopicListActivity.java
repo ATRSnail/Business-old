@@ -59,6 +59,7 @@ public class TopicListActivity extends BaseActivity implements SwipeRefreshLayou
     TextView mEmptyView;
     private ImageView mActImg;
     private ImageView mTopicImg;
+    private TextView mTv;
 
     @Inject
     Activity mActivity;
@@ -107,8 +108,10 @@ public class TopicListActivity extends BaseActivity implements SwipeRefreshLayou
         mTitleHeader = View.inflate(mActivity, R.layout.layout_head_text, null);
         mActImg = (ImageView) mTitleHeader.findViewById(R.id.img_act);
         mTopicImg = (ImageView) mTitleHeader.findViewById(R.id.img_topic);
+        mTv = (TextView) mTitleHeader.findViewById(R.id.tv_title);
         mActImg.setVisibility(View.GONE);
         mTopicImg.setVisibility(View.VISIBLE);
+        mTv.setText("最新专题");
         Glide.with(App.getAppContext()).load(ApiConstants.NETEAST_HOST +imgUrl).asBitmap() // gif格式有时会导致整体图片不显示，貌似有冲突
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -164,10 +167,14 @@ public class TopicListActivity extends BaseActivity implements SwipeRefreshLayou
                 //   checkIsEmpty(newsBean);
                 break;
             case LoadNewsType.TYPE_LOAD_MORE_SUCCESS:
-                if (newsBean == null || newsBean.size() == 0) {
-                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
-                } else {
+                if (newsBean == null){
+                    return;
+                }
+                if (newsBean.size() == Constants.numPerPage){
                     mTopicsAdapter.notifyDataChangedAfterLoadMore(newsBean, true);
+                }else {
+                    mTopicsAdapter.notifyDataChangedAfterLoadMore(newsBean, false);
+                    Snackbar.make(mNewsRV, getString(R.string.no_more), Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             case LoadNewsType.TYPE_LOAD_MORE_ERROR:
